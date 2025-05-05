@@ -13,7 +13,7 @@ export const pollBatchResults = async (tokens) => {
   while (true) {
     //hitting end point and getting data
     const { data } = await axios.get(
-      `${process.env.JUDGE0_BASE_URL}/submissions/batch`,
+      `${process.env.JUDGE0_API_URL}/submissions/batch`,
       {
         params: {
           tokens: tokens.join(","),
@@ -25,15 +25,28 @@ export const pollBatchResults = async (tokens) => {
     const isAllDone = results.every(
       (r) => r.status.id !== 1 && r.status.id !== 2
     );
+
     if (isAllDone) return results;
     await sleep(1000);
   }
 };
 export const submitBatch = async (submissions) => {
   const { data } = await axios.post(
-    `${process.env.JUDGE0_BASE_URL}/submissions/batch?base64_encoded=false`,
-    { submissions }
+    `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
+    {
+      submissions,
+    }
   );
 
   return data;
 };
+export function getLanguageName(languageId) {
+  const LANGUAGE_NAMES = {
+    74: "TypeScript",
+    63: "JavaScript",
+    71: "Python",
+    62: "Java",
+  };
+
+  return LANGUAGE_NAMES[languageId] || "Unknown";
+}
