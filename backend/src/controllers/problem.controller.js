@@ -84,7 +84,6 @@ export const createProblem = async (req, res) => {
       problem: newProblem,
     });
   } catch (error) {
-    
     return res.status(500).json({
       error: "Error creating problem",
     });
@@ -199,7 +198,7 @@ export const updateProblem = async (req, res) => {
         }
       }
     }
- 
+
     const updatedProblem = await db.problem.update({
       where: {
         id,
@@ -217,7 +216,6 @@ export const updateProblem = async (req, res) => {
         userId: req.user.id,
       },
     });
-
 
     return res.status(200).json({
       message: "Problem updated successfully",
@@ -241,7 +239,7 @@ export const deleteProblem = async (req, res) => {
     return res.status(200).json({
       message: "Problem deleted successfully",
       success: true,
-      deletedProblem
+      deletedProblem,
     });
   } catch (error) {
     return res.status(500).json({
@@ -249,4 +247,33 @@ export const deleteProblem = async (req, res) => {
     });
   }
 };
-export const getSolvedProblemsSolvedByUser = async (req, res) => {};
+export const getSolvedProblemsSolvedByUser = async (req, res) => {
+  try {
+    const problems = await db.problem.findMany({
+      where: {
+        solvedBy: {
+          some: {
+            userId: req.user.id,
+          },
+        },
+      },
+      include: {
+        solvedBy: {
+          where: {
+            userId: req.user.id,
+          },
+        },
+      },
+    });
+    return res.status(200).json({
+      message: "Problem solved by user fetched successfully",
+      success: true,
+      problems,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching problem",
+    });
+  }
+};
