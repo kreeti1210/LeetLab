@@ -3,5 +3,8 @@
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "daisyui": "^5.0.35"
   }
 }

@@ -1,6 +1,6 @@
 import { authMiddleware } from "../middleware/auth.middleware.js";
-import { getAllSubmissionsforaUser,getallSubmissionForProblembyUser,getTheSubmissionsCountForProblem} from "../controllers/problem.controller.js";
-import express from express;
+import { getAllSubmissionsforaUser,getallSubmissionForProblembyUser,getTheSubmissionsCountForProblem} from "../controllers/submission.controller.js";
+import express from "express";
 
 const submissionRoutes= express.Router();
 
