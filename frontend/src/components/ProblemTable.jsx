@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-
+import { usePlayListStore } from "../store/usePlayListStore";
 import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
-
+import CreatePlayListModel from "../components/CreatePlayListModel"
 const ProblemTable = ({ problems }) => {
   const { authUser } = useAuthStore();
-
+  const { createPlayList } = usePlayListStore();
+  const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
@@ -49,12 +50,20 @@ const ProblemTable = ({ problems }) => {
   const handleDelete = (id) => {};
 
   const handleAddToPlaylist = (id) => {};
+  const handleCreatePlayList = async (data) => {
+    await createPlayList(data);
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-10">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Problems</h2>
-        <button className="btn btn-primary gap-2" onClick={() => {}}>
+        <button
+          className="btn btn-primary gap-2"
+          onClick={() => {
+            setIsCreateModelOpen(true);
+          }}
+        >
           <Plus className="w-4 h-4" />
           Create Playlist
         </button>
@@ -215,6 +224,13 @@ const ProblemTable = ({ problems }) => {
           Next
         </button>
       </div>
+
+      {/* Creating Model */}
+      <CreatePlayListModel
+        isOpen={isCreateModelOpen} //value of clicked button
+        onClose={() => setIsCreateModelOpen(false)}
+        onSubmit={handleCreatePlayList} //sending data to backend
+      />
     </div>
   );
 };
