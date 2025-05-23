@@ -26,7 +26,7 @@ app.use("/api/v1/auth",authRoutes);
 app.use("/api/v1/problems",problemRoutes);
 app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
-app.use("/api/vi/playlist", playlistRoutes);
+app.use("/api/v1/playlist", playlistRoutes);
 app.listen(process.env.PORT,()=>console.log("server started at port for leetlab",process.env.PORT));
 
 

@@ -4,7 +4,7 @@ import { ArrowLeft, Mail, User, Shield, Image } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 // import ProfileSubmission from "../components/ProfileSubmission";
 // import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
-// import PlaylistProfile from "../components/PlaylistProfile";
+import PlaylistProfile from "../components/PlaylistProfile";
 
 const Profile = () => {
   const { authUser } = useAuthStore();
@@ -122,13 +122,13 @@ const Profile = () => {
                     </div>
                 </div>
       </div>
-      {/* <div>
-        <ProfileSubmission />
+      <div>
+        {/* <ProfileSubmission />
 
-        <ProblemSolvedByUser />
+        <ProblemSolvedByUser /> */}
 
         <PlaylistProfile />
-      </div> */}
+      </div>
 
       {/* PLaylist created by the user and their actions */}
     </div>

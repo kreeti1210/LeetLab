@@ -4,14 +4,18 @@ import { Link } from "react-router-dom";
 import { usePlayListStore } from "../store/usePlayListStore";
 import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel"
+import AddToPlayListModel from "../components/AddToPlayListModel";
+import { set } from "react-hook-form";
 const ProblemTable = ({ problems }) => {
   const { authUser } = useAuthStore();
   const { createPlayList } = usePlayListStore();
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
+  const [isAddToPlayListModelOpen,setIsAddToPlayListModelOpen]=useState(false);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProblemId, setSelectedProblemId] = useState(null);
 
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
@@ -49,9 +53,13 @@ const ProblemTable = ({ problems }) => {
 
   const handleDelete = (id) => {};
 
-  const handleAddToPlaylist = (id) => {};
+  const handleAddToPlaylist = (problemId) => {
+    setSelectedProblemId(problemId);
+    setIsAddToPlayListModelOpen(true);
+  };
   const handleCreatePlayList = async (data) => {
     await createPlayList(data);
+
   };
 
   return (
@@ -225,11 +233,16 @@ const ProblemTable = ({ problems }) => {
         </button>
       </div>
 
-      {/* Creating Model */}
+      /* Creating Model */
       <CreatePlayListModel
         isOpen={isCreateModelOpen} //value of clicked button
         onClose={() => setIsCreateModelOpen(false)}
         onSubmit={handleCreatePlayList} //sending data to backend
+      />
+      <AddToPlayListModel
+      isOpen={isAddToPlayListModelOpen}
+      onClose={()=>setIsAddToPlayListModelOpen(false)}
+      problemId={selectedProblemId}
       />
     </div>
   );
