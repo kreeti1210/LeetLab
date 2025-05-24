@@ -22,12 +22,20 @@ import { useProblemStore } from "../store/useProblemStore";
 import { useExecutionStore } from "../store/useExecutionStore";
 import { getLanguageId } from "../lib/lang";
 import SubmissionResults from "../components/Submission";
+import SubmissionsList from "../components/SubmissionList";
+import { useSubmissionStore } from "../store/useSubmissionStore";
 
 const ProblemPage = () => {
   const { id } = useParams();
   const { getProblemById, problem, isProblemLoading } = useProblemStore();
   console.log(problem);
-
+  const {
+    submission: submissions,
+    isLoading: isSubmissionsLoading,
+    getSubmissionsForProblem,
+    getSubmissionCount,
+    submissionCount,
+  } = useSubmissionStore();
   const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState("description");
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
@@ -36,9 +44,10 @@ const ProblemPage = () => {
 
   const { executeCode, submission, isExecuting } = useExecutionStore();
 
-  const submissionCount = 10;
+
   useEffect(() => {
     getProblemById(id);
+    getSubmissionCount(id);
   }, [id]);
 
   useEffect(() => {
@@ -53,6 +62,12 @@ const ProblemPage = () => {
       );
     }
   }, [problem, selectedLanguage]);
+  useEffect(() => {
+    if (activeTab === "submissions" && id) {
+      getSubmissionsForProblem(id);
+    }
+  }, [activeTab, id]);
+
 
   const handleLanguageChange = (e) => {
     const lang = e.target.value;
@@ -122,12 +137,7 @@ const ProblemPage = () => {
           </div>
         );
       case "submissions":
-        return (
-          <div className="p-4 text-center text-base-content/70">
-            No Submisssion
-          </div>
-        );
-      // return <SubmissionsList submissions={submissions} isLoading={isSubmissionsLoading} />;
+      return <SubmissionsList submissions={submissions} isLoading={isSubmissionsLoading} />;
       case "discussion":
         return (
           <div className="p-4 text-center text-base-content/70">
@@ -166,6 +176,16 @@ const ProblemPage = () => {
       console.log("Error executing code", error);
     }
   };
+  if (isProblemLoading || !problem) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-base-200">
+        <div className="card bg-base-100 p-8 shadow-xl">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <p className="mt-4 text-base-content/70">Loading problem...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 max-w-7xl w-full">
@@ -189,7 +209,7 @@ const ProblemPage = () => {
               </span>
               <span className="text-base-content/30">•</span>
               <Users className="w-4 h-4" />
-              <span>{10} Submissions</span>
+              <span>{submissionCount || 0} Submissions</span>
               <span className="text-base-content/30">•</span>
               <ThumbsUp className="w-4 h-4" />
               <span>95% Success Rate</span>

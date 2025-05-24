@@ -233,7 +233,7 @@ const ProblemTable = ({ problems }) => {
         </button>
       </div>
 
-      /* Creating Model */
+       {/* Creating Model */}
       <CreatePlayListModel
         isOpen={isCreateModelOpen} //value of clicked button
         onClose={() => setIsCreateModelOpen(false)}
