@@ -28,7 +28,6 @@ import { useSubmissionStore } from "../store/useSubmissionStore";
 const ProblemPage = () => {
   const { id } = useParams();
   const { getProblemById, problem, isProblemLoading } = useProblemStore();
-  console.log(problem);
   const {
     submission: submissions,
     isLoading: isSubmissionsLoading,

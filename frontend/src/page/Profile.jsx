@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, User, Shield, Image } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
-// import ProfileSubmission from "../components/ProfileSubmission";
-// import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
+import ProfileSubmission from "../components/ProfileSubmission";
+ import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
 
 const Profile = () => {
@@ -122,9 +122,9 @@ const Profile = () => {
         </div>
       </div>
       <div>
-        {/* <ProfileSubmission />
+        <ProfileSubmission />
 
-        <ProblemSolvedByUser /> */}
+        <ProblemSolvedByUser />
 
         <PlaylistProfile />
       </div>

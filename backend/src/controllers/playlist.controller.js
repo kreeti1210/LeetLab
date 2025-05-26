@@ -15,7 +15,13 @@ export const getAllListDetails = async (req, res) => {
         },
       },
     });
-    console.log(allList);
+    if(!allList){
+      return res.status(404).json({
+        success: false,
+        message: "No playlist found",
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: "Every playlist for our user fetched successfully",
@@ -45,7 +51,7 @@ export const getPlayListDetails = async (req, res) => {
         },
       },
     });
-    console.log(playlist);
+  
 
     if (!playlist) {
       return res.status(404).json({
