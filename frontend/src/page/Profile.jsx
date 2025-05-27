@@ -1,13 +1,26 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Mail, User, Shield, Image } from "lucide-react";
+import {
+  ArrowLeft,
+  Mail,
+  User,
+  Shield,
+  Image,
+  ExternalLink,
+} from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
-import ProfileSubmission from "../components/ProfileSubmission";
+import { useSubmissionStore } from "../store/useSubmissionStore";
+
  import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
 
 const Profile = () => {
   const { authUser } = useAuthStore();
+    const { submissions, getAllSubmissions } = useSubmissionStore();
+      useEffect(() => {
+        getAllSubmissions();
+      }, [getAllSubmissions]);
+    
 
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center py-10 px-4 md:px-8 w-full">
@@ -122,7 +135,35 @@ const Profile = () => {
         </div>
       </div>
       <div>
-        <ProfileSubmission />
+        <div className=" bg-base-200 p-4 ">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+              <h3 className="text-3xl font-bold text-primary mb-4 md:mb-0">
+                Total Submissions
+              </h3>
+              <Link
+                to={`/submissions`}
+                className="btn btn-sm btn-outline btn-primary"
+              >
+                <ExternalLink size={14} className="mr-1" />
+                View All Submissions
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 mt-6 mb-3">
+            <div className="stat bg-base-100 shadow">
+              <div className="stat-title">Total</div>
+              <div className="stat-value">{submissions?.length}</div>
+            </div>
+            <div className="stat bg-base-100 shadow ">
+              <div className="stat-title">Accepted</div>
+              <div className="stat-value text-success">
+                {submissions?.filter((s) => s.status === "Accepted").length}
+              </div>
+            </div>
+          </div>
+        
+        </div>
 
         <ProblemSolvedByUser />
 

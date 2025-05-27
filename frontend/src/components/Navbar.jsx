@@ -59,14 +59,23 @@ const Navbar = () => {
                   My Profile
                 </Link>
               </li>
+               <li>
+                <Link
+                  to="/submissions"
+                  className="hover:bg-primary hover:text-white text-base font-semibold"
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Submissions
+                </Link>
+              </li>
               {authUser?.role === "ADMIN" && (
                 <li>
                   <Link
                     to="/add-problem"
                     className="hover:bg-primary hover:text-white text-base font-semibold"
                   >
-                    <Code className="w-4 h-4 mr-1" />
-                    Add Problem
+                    <Code className="w-4 h-4 mr-1 pr-1" />
+                      Add Problem
                   </Link>
                 </li>
               )}
