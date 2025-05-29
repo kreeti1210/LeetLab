@@ -38,8 +38,6 @@ export const executeCode = async (req, res) => {
     // 4. Poll judge0 for results of all submitted test cases
     const results = await pollBatchResults(tokens);
 
-    console.log("Result-------------");
-    console.log(results);
 
     //  Analyze test case results
     let allPassed = true;
@@ -70,8 +68,7 @@ export const executeCode = async (req, res) => {
       // console.log(`Matched testcase #${i+1}: ${passed}`)
     });
 
-    console.log(detailedResults);
-
+    
     // store submission summary
     const submission = await db.submission.create({
       data: {

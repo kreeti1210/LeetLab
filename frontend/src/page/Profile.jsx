@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -10,18 +10,21 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useSubmissionStore } from "../store/useSubmissionStore";
+import ChangePasswordPopup from "../components/ChangePasswordPopup";
 
  import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
 
 const Profile = () => {
-  const { authUser } = useAuthStore();
+  const { authUser,forgotPassword,resetSuccessfully } = useAuthStore();
     const { submissions, getAllSubmissions } = useSubmissionStore();
       useEffect(() => {
         getAllSubmissions();
       }, [getAllSubmissions]);
-    
-
+     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+     const handleChangePassword = async (data) => {
+       await forgotPassword(data);
+     };
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center py-10 px-4 md:px-8 w-full">
       {/* Header with back button */}
@@ -129,7 +132,17 @@ const Profile = () => {
               <button className="btn btn-outline btn-primary">
                 Edit Profile
               </button>
-              <button className="btn btn-primary">Change Password</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => setIsChangePasswordOpen(true)}
+              >
+                Change Password
+              </button>
+              <ChangePasswordPopup
+                isOpen={isChangePasswordOpen} //value of clicked button
+                onClose={() => setIsChangePasswordOpen(false)}
+                onSubmit={handleChangePassword} //sending data to backend
+              />
             </div>
           </div>
         </div>
@@ -162,12 +175,11 @@ const Profile = () => {
               </div>
             </div>
           </div>
-        
         </div>
 
         <ProblemSolvedByUser />
 
-        <PlaylistProfile />
+        {!resetSuccessfully && <PlaylistProfile />}
       </div>
 
       {/* PLaylist created by the user and their actions */}

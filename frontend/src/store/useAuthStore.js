@@ -8,6 +8,8 @@ export const useAuthStore = create((set) => ({
   isSigninUp: false,
   isLoggingIn: false,
   isCheckingAuth: false,
+  isPasswordReset: false, 
+  resetSuccessfully: false,
 
   checkAuth: async () => {
     set({ isCheckingAuth: true });
@@ -67,4 +69,19 @@ export const useAuthStore = create((set) => ({
       toast.error("Error logging out");
     }
   },
+  forgotPassword: async (data) => {
+    try {
+      set({ isPasswordReset: true });
+      const res = await axiosInstance.post("/auth/forgot-password", data);      
+      toast.success(res.data.message);
+      set({ resetSuccessfully: true });
+
+    } catch (error) {
+      console.log("Error forgot password", error);
+      toast.error("Error forgot password");
+    }
+    finally {
+      set({ isPasswordReset: false });
+    }
+  }
 }));

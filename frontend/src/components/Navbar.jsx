@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Code, LogOut } from "lucide-react";
+import { User, Code, LogOut, Folder } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
@@ -64,7 +64,7 @@ const Navbar = () => {
                   to="/submissions"
                   className="hover:bg-primary hover:text-white text-base font-semibold"
                 >
-                  <User className="w-4 h-4 mr-2" />
+                  <Folder className="w-4 h-4 mr-2" />
                   Submissions
                 </Link>
               </li>

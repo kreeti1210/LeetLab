@@ -111,7 +111,7 @@ export const createPlayList = async (req, res) => {
         userId,
       },
     });
-    console.log(playlist);
+
 
     return res.status(200).json({
       success: true,
@@ -174,7 +174,7 @@ export const addProblemToPlaylist = async (req, res) => {
         problemId,
       })),
     });
-    console.log(problemsInPlaylist);
+
 
     res.status(201).json({
       success: true,

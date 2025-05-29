@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePlayListStore } from "../store/usePlayListStore";
+import { useAuthStore } from "../store/useAuthStore"; 
 import { Link } from "react-router-dom";
 import {
   BookOpen,
@@ -13,6 +14,8 @@ import {
 import CreatePlayListModel from "../components/CreatePlayListModel";
 
 const PlaylistProfile = () => {
+  const { authUser } = useAuthStore();
+
   const { playlists, deletePlaylist, getAllPlayLists } = usePlayListStore();
   const [expandedPlaylist, setExpendedPlaylist] = useState(null);
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
@@ -20,7 +23,7 @@ const PlaylistProfile = () => {
    
   useEffect(() => {
     getAllPlayLists();
-  }, [getAllPlayLists, playlists]);
+  }, [authUser,getAllPlayLists, playlists]);
 
 
   const togglePlayList = (id) => {
