@@ -14,17 +14,22 @@ import ChangePasswordPopup from "../components/ChangePasswordPopup";
 
  import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
+import EditProfile from "../components/EditProfile";
 
 const Profile = () => {
-  const { authUser,forgotPassword,resetSuccessfully } = useAuthStore();
+  const { authUser,forgotPassword,resetSuccessfully,changeRoleProfile } = useAuthStore();
     const { submissions, getAllSubmissions } = useSubmissionStore();
       useEffect(() => {
         getAllSubmissions();
       }, [getAllSubmissions]);
      const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+     const[isEditProfileOpen, setIsEditProfileOpen] = useState(false);
      const handleChangePassword = async (data) => {
        await forgotPassword(data);
      };
+     const handleEditProfile = async (data) => {
+     await  changeRoleProfile(data); 
+     }
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center py-10 px-4 md:px-8 w-full">
       {/* Header with back button */}
@@ -129,9 +134,17 @@ const Profile = () => {
 
             {/* Action Buttons */}
             <div className="card-actions justify-end mt-6">
-              <button className="btn btn-outline btn-primary">
+              <button
+                className="btn btn-outline btn-primary"
+                onClick={() => setIsEditProfileOpen(true)}
+              >
                 Edit Profile
               </button>
+              <EditProfile
+                isOpen={isEditProfileOpen} //value of clicked button
+                onClose={() => setIsEditProfileOpen(false)}
+                onSubmit={handleEditProfile} //sending data to backend
+              />
               <button
                 className="btn btn-primary"
                 onClick={() => setIsChangePasswordOpen(true)}

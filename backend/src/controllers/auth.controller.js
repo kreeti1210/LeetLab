@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { UserRole } from "../generated/prisma/index.js";
 
 export const register = async (req, res) => {
-  const { email, password, name,role } = req.body;
+  const { email, password, name, role } = req.body;
   try {
     const existingUser = await db.user.findUnique({
       where: {
@@ -20,7 +20,7 @@ export const register = async (req, res) => {
         email,
         password: hashedPassword,
         name,
-        role: role==="ADMIN"?UserRole.ADMIN:UserRole.USER,
+        role: role === "ADMIN" ? UserRole.ADMIN : UserRole.USER,
       },
     });
     const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
@@ -84,7 +84,9 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ success:false,message: "login unsuccesful", error });
+    res
+      .status(500)
+      .json({ success: false, message: "login unsuccesful", error });
   }
 };
 export const logout = async (req, res) => {
@@ -110,42 +112,74 @@ export const check = async (req, res) => {
       user: req.user,
     });
   } catch (error) {
-        res.status(501).json({ message: "not logged in", error });
+    res.status(501).json({ message: "not logged in", error });
   }
 };
-export const forgetPassword = async (req,res) => {
- try {
-   const {email,oldPassword, newPassword, confirmPassword} = req.body;
-   const user = await db.user.findUnique({
-     where: {
-       email,
-       
-     },
-   })
-   if(!user){
-     return res.status(404).json({message:"User not found"});
-   }
-   const isMatch = await bcrypt.compare(oldPassword, user.password);
-   if (!isMatch) {
-     return res.status(401).json({ message: "Invalid credentials" }); // haker ko ye nhi btatae ki password match nhi kr ra
-   }
-   if (newPassword !== confirmPassword) {
-     throw new ApiError(402, "Password and Confirm password are not match.");
-   }
-   const hashedPassword = await bcrypt.hash(newPassword, 10);
-   await db.user.update({
-     where: {
-       email,
-     },
-     data: {
-       password: hashedPassword,
-     },
-   });
-   return res.status(200).json({message:"Password updated successfully.  Login with new password"});
-   
- } catch (error) {
-  console.log(error);
-   return res.status(500).json({message:"Error updating password"});
- }
-}
+export const forgetPassword = async (req, res) => {
+  try {
+    const { email, oldPassword, newPassword, confirmPassword } = req.body;
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" }); // haker ko ye nhi btatae ki password match nhi kr ra
+    }
+    if (newPassword !== confirmPassword) {
+      throw new ApiError(402, "Password and Confirm password are not match.");
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await db.user.update({
+      where: {
+        email,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    return res
+      .status(200)
+      .json({
+        message: "Password updated successfully.  Login with new password",
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Error updating password" });
+  }
+};
+export const changeRole = async (req, res) => {
+  try {
+    const { email} = req.body;
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const newRole = user.role === "ADMIN" ? UserRole.USER : UserRole.ADMIN;
 
+   const updatedUser = await db.user.update({
+      where: {
+        email,
+      },
+      data: {
+        role: newRole,
+      },
+    });
+    return res.status(200).json({
+      message: "Role switched successfully",
+      user: updatedUser,
+      role: updatedUser.role,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Error switching role" });
+  }
+};

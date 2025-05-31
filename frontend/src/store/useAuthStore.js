@@ -3,19 +3,20 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 
+
 export const useAuthStore = create((set) => ({
   authUser: null,
   isSigninUp: false,
   isLoggingIn: false,
   isCheckingAuth: false,
-  isPasswordReset: false, 
+  isPasswordReset: false,
   resetSuccessfully: false,
+  isChangingRole: false,
 
   checkAuth: async () => {
     set({ isCheckingAuth: true });
     try {
       const res = await axiosInstance.get("/auth/check");
-
 
       set({ authUser: res.data.user });
     } catch (error) {
@@ -72,16 +73,27 @@ export const useAuthStore = create((set) => ({
   forgotPassword: async (data) => {
     try {
       set({ isPasswordReset: true });
-      const res = await axiosInstance.post("/auth/forgot-password", data);      
+      const res = await axiosInstance.post("/auth/forgot-password", data);
       toast.success(res.data.message);
       set({ resetSuccessfully: true });
-
     } catch (error) {
       console.log("Error forgot password", error);
       toast.error("Error forgot password");
-    }
-    finally {
+    } finally {
       set({ isPasswordReset: false });
     }
-  }
+  },
+  changeRoleProfile: async (data) => {
+    try {
+      set({ isChangingRole: true });
+      const res = await axiosInstance.post("/auth/change-role",data);
+      console.log(res.data);
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("Error switching roles", error);
+      toast.error("Error switching roles");
+    } finally {
+      set({ isChangingRole: false });
+    }
+  },
 }));
