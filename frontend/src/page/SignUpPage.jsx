@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
-import { Code, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Code, Eye, User, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
 import { z } from "zod";
 import AuthImagePattern from "../components/AuthImagePattern";
@@ -52,23 +52,23 @@ const SignUpPage = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6 p-4 rounded-xl border border-base-300 shadow shadow-grey-400/100"
+          >
             {/* name */}
-            <div className="form-control">
+            <div className="form-control ">
               <label className="label">
-                <span className="label-text font-medium">Name</span>
+                <span className="label-text mb-1 font-medium">Name</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Code className="h-5 w-5 text-base-content/40" />
-                </div>
                 <input
                   type="text"
                   {...register("name")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full  ${
                     errors.name ? "input-error" : ""
                   }`}
-                  placeholder="John Doe"
+                  placeholder="Name"
                 />
               </div>
               {errors.name && (
@@ -81,19 +81,16 @@ const SignUpPage = () => {
             {/* Email */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Email</span>
+                <span className="label-text mb-1 font-medium">Email</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
-                </div>
                 <input
                   type="email"
                   {...register("email")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full ${
                     errors.email ? "input-error" : ""
                   }`}
-                  placeholder="you@example.com"
+                  placeholder="you@email.com"
                 />
               </div>
               {errors.email && (
@@ -106,7 +103,7 @@ const SignUpPage = () => {
             {/* Password */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Password</span>
+                <span className="label-text mb-1 font-medium">Password</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -115,7 +112,7 @@ const SignUpPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full ${
                     errors.password ? "input-error" : ""
                   }`}
                   placeholder="••••••••"

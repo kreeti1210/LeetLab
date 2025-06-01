@@ -3,14 +3,15 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { usePlayListStore } from "../store/usePlayListStore";
 import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
-import CreatePlayListModel from "../components/CreatePlayListModel"
+import CreatePlayListModel from "../components/CreatePlayListModel";
 import AddToPlayListModel from "../components/AddToPlayListModel";
 import { set } from "react-hook-form";
 const ProblemTable = ({ problems }) => {
   const { authUser } = useAuthStore();
   const { createPlayList } = usePlayListStore();
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
-  const [isAddToPlayListModelOpen,setIsAddToPlayListModelOpen]=useState(false);
+  const [isAddToPlayListModelOpen, setIsAddToPlayListModelOpen] =
+    useState(false);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
@@ -40,7 +41,7 @@ const ProblemTable = ({ problems }) => {
       );
   }, [problems, search, difficulty, selectedTag]);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 12;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
   const paginatedProblems = useMemo(() => {
     return filteredProblems.slice(
@@ -59,11 +60,10 @@ const ProblemTable = ({ problems }) => {
   };
   const handleCreatePlayList = async (data) => {
     await createPlayList(data);
-
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-10">
+    <div className="w-full max-w-6xl mx-auto bg-primary/20 z-20 p-6 rounded-sm mt-10">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Problems</h2>
         <button
@@ -213,36 +213,38 @@ const ProblemTable = ({ problems }) => {
       </div>
 
       {/*  */}
-      <div className="flex justify-center mt-6 gap-2">
-        <button
-          className="btn btn-sm"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-        >
-          Prev
-        </button>
-        <span className="btn btn-ghost btn-sm">
-          {currentPage} / {totalPages}
-        </span>
-        <button
-          className="btn btn-sm"
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-        >
-          Next
-        </button>
+      <div className="flex justify-center mt-6 items-center  gap-2">
+        <div className=" outline shadow-sm  btn-group rounded-sm">
+          <button
+            className="btn btn-sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            Prev
+          </button>
+          <span className="btn btn-ghost btn-sm">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            className="btn btn-sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
-       {/* Creating Model */}
+      {/* Creating Model */}
       <CreatePlayListModel
         isOpen={isCreateModelOpen} //value of clicked button
         onClose={() => setIsCreateModelOpen(false)}
         onSubmit={handleCreatePlayList} //sending data to backend
       />
       <AddToPlayListModel
-      isOpen={isAddToPlayListModelOpen}
-      onClose={()=>setIsAddToPlayListModelOpen(false)}
-      problemId={selectedProblemId}
+        isOpen={isAddToPlayListModelOpen}
+        onClose={() => setIsAddToPlayListModelOpen(false)}
+        problemId={selectedProblemId}
       />
     </div>
   );

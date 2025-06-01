@@ -10,7 +10,7 @@ const UpgradePremium = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-base-100 rounded-lg shadow-xl w-full max-w-md">
         <div className="flex justify-between items-center p-4 border-b border-base-300">
-          <h3 className="text-xl font-bold">Upgrade to premium</h3>
+          <h3 className="text-xl font-bold ml-2">Upgrade to premium</h3>
           <button
             onClick={onClose}
             className="btn btn-ghost btn-sm btn-circle"
