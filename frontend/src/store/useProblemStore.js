@@ -8,6 +8,7 @@ export const useProblemStore = create((set) => ({
   isProblemsLoading: null,
   isProblemLoading: null,
   solvedProblems: null,
+  totalSolvedProblems: null,
 
   getAllProblems: async () => {
     try {
@@ -40,13 +41,19 @@ export const useProblemStore = create((set) => ({
   },
   getSolvedProblemByUser: async () => {
     try {
+      set({ isProblemLoading: true });
       const res = await axiosInstance.get("/problems/get-solved-problems");
       set({
         solvedProblems: res.data.problems,
       });
+      set({
+        totalSolvedProblems: res.data.problems.length,
+      });
     } catch (error) {
       console.log("error getting all solved problems", error);
       toast.error("Error in getting solved problem");
+    } finally {
+      set({ isProblemLoading: false });
     }
   },
 }));

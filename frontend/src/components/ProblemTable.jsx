@@ -63,52 +63,54 @@ const ProblemTable = ({ problems }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto bg-primary/20 z-20 p-6 rounded-sm mt-10">
-      <div className="flex justify-between items-center mb-6">
+    <div className="w-full max-w-6xl mx-auto  bg-primary/20 z-20 p-6 rounded-sm mt-10">
+      <div className="flex justify-between items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold">Problems</h2>
-        <button
-          className="btn btn-primary gap-2"
-          onClick={() => {
-            setIsCreateModelOpen(true);
-          }}
-        >
-          <Plus className="w-4 h-4" />
-          Create Playlist
-        </button>
-      </div>
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-row justify-between   gap-4">
+            <input
+              type="text"
+              placeholder="Search by title"
+              className="input input-bordered w-full md:w-1/3 bg-base-200"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <select
+              className="select select-bordered bg-base-200 w-full md:w-1/3"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="ALL">All Difficulties</option>
+              {difficulties.map((diff) => (
+                <option key={diff} value={diff}>
+                  {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
+                </option>
+              ))}
+            </select>
+            <select
+              className="select select-bordered bg-base-200 w-full md:w-1/3"
+              value={selectedTag}
+              onChange={(e) => setSelectedTag(e.target.value)}
+            >
+              <option value="ALL">All Tags</option>
+              {allTags.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-        <input
-          type="text"
-          placeholder="Search by title"
-          className="input input-bordered w-full md:w-1/3 bg-base-200"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-          className="select select-bordered bg-base-200"
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          <option value="ALL">All Difficulties</option>
-          {difficulties.map((diff) => (
-            <option key={diff} value={diff}>
-              {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
-            </option>
-          ))}
-        </select>
-        <select
-          className="select select-bordered bg-base-200"
-          value={selectedTag}
-          onChange={(e) => setSelectedTag(e.target.value)}
-        >
-          <option value="ALL">All Tags</option>
-          {allTags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
+          <button
+            className="btn btn-primary gap-2"
+            onClick={() => {
+              setIsCreateModelOpen(true);
+            }}
+          >
+            <Plus className="w-4 h-4" />
+            Create Playlist
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-xl shadow-md">

@@ -16,6 +16,8 @@ import {
   Users,
   ThumbsUp,
   Home,
+  Sun,
+  Moon
 } from "lucide-react";
 
 import { useProblemStore } from "../store/useProblemStore";
@@ -24,6 +26,8 @@ import { getLanguageId } from "../lib/lang";
 import SubmissionResults from "../components/Submission";
 import SubmissionsList from "../components/SubmissionList";
 import { useSubmissionStore } from "../store/useSubmissionStore";
+import { set } from "react-hook-form";
+import ShareModel from "../components/ShareModel";
 
 const ProblemPage = () => {
   const { id } = useParams();
@@ -40,9 +44,10 @@ const ProblemPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testCases, setTestCases] = useState([]);
+  const [isShareModelOpen, setIsShareModelOpen] = useState(false);
 
   const { executeCode, submission, isExecuting } = useExecutionStore();
-
+    const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
     getProblemById(id);
@@ -75,6 +80,15 @@ const ProblemPage = () => {
   };
   // return <div> {problem.id}</div>;
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.documentElement.setAttribute(
+      "data-theme",
+      darkMode ? "light" : "dark"
+    );
+
+  };
+ 
   const renderTabContent = () => {
     switch (activeTab) {
       case "description":
@@ -217,6 +231,16 @@ const ProblemPage = () => {
         </div>
         <div className="flex-none gap-4">
           <button
+            onClick={toggleDarkMode}
+            className="btn btn-circle btn-ghost hover:bg-primary/20"
+          >
+            {darkMode ? (
+              <Sun className="w-5 h-5 border-white-400" />
+            ) : (
+              <Moon className="w-5 h-5 bg-amber-400-300" />
+            )}
+          </button>
+          <button
             className={`btn btn-ghost btn-circle ${
               isBookmarked ? "text-primary" : ""
             }`}
@@ -224,9 +248,17 @@ const ProblemPage = () => {
           >
             <Bookmark className="w-5 h-5" />
           </button>
-          <button className="btn btn-ghost btn-circle">
+          <button
+            className="btn btn-ghost btn-circle"
+            onClick={() => setIsShareModelOpen(true)}
+          >
             <Share2 className="w-5 h-5" />
           </button>
+          <ShareModel
+            isOpen={isShareModelOpen}
+            onClose={() => setIsShareModelOpen(false)}
+            problemUrl={`/problem/${id}`}
+          />
           <select
             className="select select-bordered select-primary w-40"
             value={selectedLanguage}
@@ -284,7 +316,9 @@ const ProblemPage = () => {
                 </button>
               </div>
 
-              <div className="p-6">{problem!==null && renderTabContent()}</div>
+              <div className="p-6">
+                {problem !== null && renderTabContent()}
+              </div>
             </div>
           </div>
 
