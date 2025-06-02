@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { usePlayListStore } from "../store/usePlayListStore";
-import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
+import { Bookmark, PencilIcon, Trash, TrashIcon, Plus,Info } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
 import AddToPlayListModel from "../components/AddToPlayListModel";
 import { set } from "react-hook-form";
@@ -65,9 +65,21 @@ const ProblemTable = ({ problems }) => {
   return (
     <div className="w-full max-w-6xl mx-auto  bg-primary/20 z-20 p-6 rounded-sm mt-10">
       <div className="flex justify-between items-center mb-6 gap-4">
-        <h2 className="text-2xl font-bold">Problems</h2>
+        <div className="flex flex-row gap-3  items-center justify-center">
+          <h2 className="text-2xl font-bold">Problems</h2>
+        </div>
         <div className="flex flex-row gap-4">
           <div className="flex flex-row justify-between   gap-4">
+            <button className="btn btn-primary/20 shadow-md  hover:bg-primary/20 ">
+              Solve Demo
+              <div className="relative group">
+                <Info className="w-4 h-4 cursor-pointer" />
+                <span className="absolute text-left top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 text-sm bg-base-200 rounded shadow-lg opacity-0 transition-opacity duration-200 group-hover:opacity-100 z-50  w-max max-w-xs">
+                  New here? Here's sample problem with solution.  Run the code to see the working
+                </span>
+              </div>
+            </button>
+
             <input
               type="text"
               placeholder="Search by title"
