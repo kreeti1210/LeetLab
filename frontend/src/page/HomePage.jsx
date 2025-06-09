@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useProblemStore } from "../store/useProblemStore";
-import { Link, Loader } from "lucide-react";
+import { Rocket, Link, Loader } from "lucide-react";
 import ProblemTable from "../components/ProblemTable.jsx";
 import { useAuthStore } from "../store/useAuthStore";
 import ProblemPage from "./ProblemPage";
@@ -12,13 +12,14 @@ const HomePage = () => {
     const navigate = useNavigate();
   const { authUser } = useAuthStore();
   const [streak, setStreak] = useState(5); // Simulated streak count
+  const [selectedCompany, setSelectedCompany] = useState("");
   const { getSolvedProblemByUser,  totalSolvedProblems } =
     useProblemStore();
   useEffect(() => {
     getSolvedProblemByUser();
   }, [getSolvedProblemByUser]);
-  const handleRecommendedproblems = (problemId) => {
-   
+  
+  const handleRecommendedproblems = (problemId) => {   
     navigate(`/problem/${problemId}`);
   };
  
@@ -33,7 +34,14 @@ const HomePage = () => {
       </div>
     );
   }
-
+  const handleCompanySelect = (company) => {
+    setSelectedCompany(company);
+  };
+  const filteredProblems = selectedCompany.toLowerCase()
+    ? problems.filter((problem) =>
+        problem.companyTags?.includes(selectedCompany)
+      )
+    : problems;
   return (
     <div className="min-h-screen flex flex-row-reverse gap-6 mt-10 px-4">
       {/* Sidebar Section - Right Side */}
@@ -52,11 +60,13 @@ const HomePage = () => {
         </p>
         <div className="flex flex-row gap-4">
           {problems.length > 0 ? (
-            <ProblemTable problems={problems} />
+            <ProblemTable problems={filteredProblems} />
           ) : (
-            <p className="mt-10 text-center text-lg font-semibold text-gray-500 border border-primary px-4 py-2 rounded-sm border-dashed">
-              No problems found
-            </p>
+            (
+              <p className="mt-10 text-center text-lg font-semibold text-gray-500 border border-primary px-4 py-2 rounded-sm border-dashed">
+                No problems found
+              </p>
+            ) 
           )}
           <aside className="w-64 bg-primary/20 p-5 rounded-sm mt-10 h-fit shadow-md overflow-y-auto">
             <h2 className="text-xl font-bold text-primary mb-3">Your Stats</h2>
@@ -76,7 +86,7 @@ const HomePage = () => {
                   <span className="mr-1">📌</span>FAANG Recommended
                 </h2>
                 <ul>
-                  {problems.slice(11,14).map((problem) => (
+                  {problems.slice(11, 14).map((problem) => (
                     <li key={problem.id}>
                       <span
                         className=" hover:underline cursor-pointer text-sm"
@@ -91,9 +101,60 @@ const HomePage = () => {
             </div>
 
             <div className="p-4 rounded-lg shadow-md bg-primary/30 text-white mt-4 flex flex-col">
-              <h2 className="text-lg font-semibold mb-1">Top Companies</h2>
-              <p>🚀 Weekly Coding Contest - Sunday</p>
-              <p>🏆 Monthly Challenge - Next Friday</p>
+              <h2 className="text-lg font-semibold mb-1">
+                🏢 Top Companies Problems
+              </h2>
+              <div className="space-y-2">
+                {[
+                  "Amazon",
+                  "Meta",
+                  "Google",
+                  "Microsoft",
+                  "Apple",
+                  "Netflix",
+                  "Tesla",
+                  "Adobe",
+                ].map((company) => (
+                  <p
+                  
+                    className={`flex items-center gap-2 cursor-pointer hover:text-primary ${
+                      selectedCompany === company
+                        ? "font-bold text-primary"
+                        : ""
+                    }`}
+                    onClick={() => handleCompanySelect(company.toLowerCase())}
+                  >
+                    <Rocket className="w-4 h-4" /> {company}
+                  </p>
+                ))}
+              </div>
+
+              {/* <div className="space-y-2">
+                <p className="flex items-center gap-2"  >
+                  <Rocket className="w-4 h-4" /> Amazon
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Facebook
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Google
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Microsoft
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Apple
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Netflix
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Tesla
+                </p>
+                <p className="flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> Adobe
+                </p>
+              </div> */}
             </div>
           </aside>
         </div>

@@ -15,6 +15,7 @@ const ProblemTable = ({ problems }) => {
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
+  const [selectedCompany, setSelectedCompany] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
 
@@ -27,6 +28,20 @@ const ProblemTable = ({ problems }) => {
 
     return Array.from(tagsSet);
   }, [problems]);
+  const allCompanyTags = useMemo(() => {
+    if (!Array.isArray(problems)) return [];
+
+    const companyTagsSet = new Set();
+
+    problems.forEach((p) =>
+      p.companyTags?.forEach((t) =>
+        companyTagsSet.add(t.charAt(0).toUpperCase() + t.slice(1).toLowerCase())
+      )
+    );
+  
+
+    return Array.from(companyTagsSet);
+  }, [problems]);
 
   const filteredProblems = useMemo(() => {
     return (problems || [])
@@ -38,8 +53,11 @@ const ProblemTable = ({ problems }) => {
       )
       .filter((problem) =>
         selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag)
+      )
+      .filter((problem)=>
+        selectedCompany==="ALL"?true: problem.companyTags?.includes(selectedCompany)
       );
-  }, [problems, search, difficulty, selectedTag]);
+  }, [problems, search, difficulty, selectedTag,selectedCompany]);
 
   const itemsPerPage = 12;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
@@ -65,17 +83,18 @@ const ProblemTable = ({ problems }) => {
   return (
     <div className="w-full max-w-6xl mx-auto  bg-primary/20 z-20 p-6 rounded-sm mt-10">
       <div className="flex justify-between items-center mb-6 gap-4">
-        <div className="flex flex-row gap-3  items-center justify-center">
+        <div className="flex flex-row gap-3 mr-15   items-center justify-center">
           <h2 className="text-2xl font-bold">Problems</h2>
         </div>
-        <div className="flex flex-row gap-4">
-          <div className="flex flex-row justify-between   gap-4">
-            <button className="btn btn-primary/20 shadow-md  hover:bg-primary/20 ">
+        <div className="flex flex-row gap-3">
+          <div className="flex flex-row justify-between   gap-3">
+            <button className="btn btn-primary/20 shadow-md hover:bg-primary/20 ">
               Solve Demo
               <div className="relative group">
                 <Info className="w-4 h-4 cursor-pointer" />
                 <span className="absolute text-left top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 text-sm bg-base-200 rounded shadow-lg opacity-0 transition-opacity duration-200 group-hover:opacity-100 z-50  w-max max-w-xs">
-                  New here? Here's sample problem with solution.  Run the code to see the working
+                  New here? Here's sample problem with solution. Run the code to
+                  see the working
                 </span>
               </div>
             </button>
@@ -83,12 +102,12 @@ const ProblemTable = ({ problems }) => {
             <input
               type="text"
               placeholder="Search by title"
-              className="input input-bordered w-full md:w-1/3 bg-base-200"
+              className="input input-bordered w-full md:w-1/5 bg-base-200"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
             <select
-              className="select select-bordered bg-base-200 w-full md:w-1/3"
+              className="select select-bordered bg-base-200 w-full md:w-1/5"
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
             >
@@ -100,7 +119,19 @@ const ProblemTable = ({ problems }) => {
               ))}
             </select>
             <select
-              className="select select-bordered bg-base-200 w-full md:w-1/3"
+              className="select select-bordered bg-base-200 w-full md:w-1/5"
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
+            >
+              <option value="ALL">All Companies</option>
+              {allCompanyTags.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+            <select
+              className="select select-bordered bg-base-200 w-full md:w-1/5"
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
             >

@@ -156,6 +156,7 @@ export const updateProblem = async (req, res) => {
     description,
     difficulty,
     tags,
+    companyTags,
     examples,
     constraints,
     testcases,
@@ -216,6 +217,7 @@ export const updateProblem = async (req, res) => {
         description,
         difficulty,
         tags,
+        companyTags,
         examples,
         constraints,
         testcases,
@@ -282,6 +284,42 @@ export const getSolvedProblemsSolvedByUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error fetching problem",
+    });
+  }
+};
+
+export const addtoCompanyTags = async (req, res) => {
+  try {
+    const { problemsids, companyTags } = req.body;
+    console.log(problemsids);
+
+    problemsids.forEach(async (id) => {
+
+      const problem = await db.problem.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      const updatedProblem = await db.problem.update({
+        where: {
+          id: problem.id,
+        },
+        data: {
+          companyTags: [...problem.companyTags, ...companyTags],
+        },
+      });
+
+    });
+
+    return res.status(200).json({
+      message: "Added company tags successfully",
+      success: true,
+      count,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error adding company tags to problem",
     });
   }
 };

@@ -15,6 +15,7 @@ import ChangePasswordPopup from "../components/ChangePasswordPopup";
  import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
 import EditProfile from "../components/EditProfile";
+import Footer from "../components/Footer";
 
 const Profile = () => {
   const { authUser,forgotPassword,resetSuccessfully,changeRoleProfile } = useAuthStore();
@@ -31,7 +32,7 @@ const Profile = () => {
      await  changeRoleProfile(data); 
      }
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center py-10 px-4 md:px-8 w-full">
+    <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center pt-10 px-4 md:px-8 w-full">
       {/* Header with back button */}
       <div className="flex flex-row justify-between items-center w-full mb-6">
         <div className="flex items-center gap-3">
@@ -188,14 +189,13 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
+          <ProblemSolvedByUser />
+
+          {!resetSuccessfully && <PlaylistProfile />}
         </div>
-
-        <ProblemSolvedByUser />
-
-        {!resetSuccessfully && <PlaylistProfile />}
       </div>
-
-      {/* PLaylist created by the user and their actions */}
+      <Footer />
     </div>
   );
 };

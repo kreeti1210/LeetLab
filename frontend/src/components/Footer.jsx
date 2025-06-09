@@ -37,7 +37,7 @@ const Footer = () => {
         {/* Social Media Links */}
         <div className="flex gap-5 mt-4 md:mt-0 text-primary">
           <a
-            href="https://github.com"
+            href="https://www.github.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-teal-400"

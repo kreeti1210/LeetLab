@@ -16,6 +16,7 @@ import Submissions from "./page/Submissions";
 import About from "./components/About";
 import Faq from "./components/Faq";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import Contact from "./components/Contact";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -73,7 +74,8 @@ const App = () => {
         />
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<Faq />} />
-        <Route path="/privacy" element={<PrivacyPolicy/>} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );
