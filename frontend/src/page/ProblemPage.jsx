@@ -8,6 +8,7 @@ import {
   Lightbulb,
   Bookmark,
   Share2,
+  Plus,
   Clock,
   ChevronRight,
   BookOpen,
@@ -17,7 +18,9 @@ import {
   ThumbsUp,
   Home,
   Sun,
-  Moon
+  Moon,
+X,
+Info
 } from "lucide-react";
 
 import { useProblemStore } from "../store/useProblemStore";
@@ -28,10 +31,11 @@ import SubmissionsList from "../components/SubmissionList";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import { set } from "react-hook-form";
 import ShareModel from "../components/ShareModel";
+import toast from "react-hot-toast";
 
 const ProblemPage = () => {
   const { id } = useParams();
-  const { getProblemById, problem, isProblemLoading } = useProblemStore();
+  const { getProblemById, problem, isProblemLoading,addCompanyTag } = useProblemStore();
   const {
     submission: submissions,
     isLoading: isSubmissionsLoading,
@@ -39,6 +43,13 @@ const ProblemPage = () => {
     getSubmissionCount,
     submissionCount,
   } = useSubmissionStore();
+  
+  useEffect(() => {
+    getProblemById(id);
+    getSubmissionCount(id);
+  }, [id]);
+  
+
   const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState("description");
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
@@ -49,10 +60,15 @@ const ProblemPage = () => {
   const { executeCode, submission, isExecuting } = useExecutionStore();
     const [darkMode, setDarkMode] = useState(true);
 
-  useEffect(() => {
-    getProblemById(id);
-    getSubmissionCount(id);
-  }, [id]);
+
+    const [searchCompany, setSearchCompany] = useState("");
+    const [selectedCompany, setSelectedCompany] = useState("");  
+    const companies =["LinkedIn", "HashedIn", "Airtel", "Swiggy", "Nykaa","Myntra","Hotstar","Snapchat"]; 
+    const filteredCompanies = companies.filter((company) =>
+      company.toLowerCase().includes(searchCompany.toLowerCase())
+    ); 
+
+
 
   useEffect(() => {
     if (problem) {
@@ -71,6 +87,10 @@ const ProblemPage = () => {
       getSubmissionsForProblem(id);
     }
   }, [activeTab, id]);
+
+  const handleAddToCompany=(problemid,company) => {   
+    addCompanyTag( [problemid],[company]);
+  };
 
 
   const handleLanguageChange = (e) => {
@@ -229,6 +249,53 @@ const ProblemPage = () => {
             </div>
           </div>
         </div>
+
+        <div className="relative mr-2 flex flex-row items-center rounded border p-2">
+          <input
+            type="text"
+            placeholder="Add to company..."
+            className="w-full bg-transparent outline-none"
+            value={selectedCompany || searchCompany || ""}
+            onChange={(e) => setSearchCompany(e.target.value)}
+          />
+
+          {searchCompany && (
+            <ul className="absolute left-0 top-full mt-1 z-10 bg-base-200 rounded shadow w-full">
+              {filteredCompanies.map((company) => (
+                <li
+                  key={company}
+                  className="p-2 bg-base-200 cursor-pointer"
+                  onClick={() => {
+                    setSelectedCompany(company);
+                    setSearchCompany("");
+                  }}
+                >
+                  {company}
+                </li>
+              ))}
+            </ul>
+          )}
+          <X
+            className="w-5 h-5 mr-2"
+            onClick={() => {
+              setSelectedCompany("");
+              setSearchCompany("");
+            }}
+          />
+          <Plus
+            className="w-5 h-5"
+            onClick={() => {
+              if (searchCompany === "" && selectedCompany === "")
+                toast.error("Please enter a company name");
+              if (selectedCompany === "" && searchCompany !== "")
+                setSelectedCompany(searchCompany);
+              if (selectedCompany !== "")
+                handleAddToCompany(problem?.id, selectedCompany);
+              // Hides dropdown
+            }}
+          />
+        </div>
+
         <div className="flex-none gap-4">
           <button
             onClick={toggleDarkMode}

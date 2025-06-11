@@ -2,7 +2,14 @@ import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { usePlayListStore } from "../store/usePlayListStore";
-import { Bookmark, PencilIcon, Trash, TrashIcon, Plus,Info } from "lucide-react";
+import {
+  Bookmark,
+  PencilIcon,
+  Trash,
+  TrashIcon,
+  Plus,
+  Info,
+} from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
 import AddToPlayListModel from "../components/AddToPlayListModel";
 import { set } from "react-hook-form";
@@ -21,16 +28,13 @@ const ProblemTable = ({ problems }) => {
 
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
-
     const tagsSet = new Set();
-
     problems.forEach((p) => p.tags?.forEach((t) => tagsSet.add(t)));
-
     return Array.from(tagsSet);
   }, [problems]);
+
   const allCompanyTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
-
     const companyTagsSet = new Set();
 
     problems.forEach((p) =>
@@ -38,8 +42,6 @@ const ProblemTable = ({ problems }) => {
         companyTagsSet.add(t.charAt(0).toUpperCase() + t.slice(1).toLowerCase())
       )
     );
-  
-
     return Array.from(companyTagsSet);
   }, [problems]);
 
@@ -54,10 +56,12 @@ const ProblemTable = ({ problems }) => {
       .filter((problem) =>
         selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag)
       )
-      .filter((problem)=>
-        selectedCompany==="ALL"?true: problem.companyTags?.includes(selectedCompany)
+      .filter((problem) =>
+        selectedCompany === "ALL"
+          ? true
+          : problem.companyTags?.includes(selectedCompany)
       );
-  }, [problems, search, difficulty, selectedTag,selectedCompany]);
+  }, [problems, search, difficulty, selectedTag, selectedCompany]);
 
   const itemsPerPage = 12;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);

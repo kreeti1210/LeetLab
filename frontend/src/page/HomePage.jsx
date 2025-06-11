@@ -7,7 +7,7 @@ import ProblemPage from "./ProblemPage";
 import { Navigate,useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const { getAllProblems, problems, isProblemsLoading, getProblemById } =
+  const { getAllProblems, problems, isProblemsLoading } =
     useProblemStore();
     const navigate = useNavigate();
   const { authUser } = useAuthStore();
@@ -111,7 +111,7 @@ const HomePage = () => {
                   "Google",
                   "Microsoft",
                   "Apple",
-                  "Netflix",
+                  "LinkedIn",
                   "Tesla",
                   "Adobe",
                 ].map((company) => (
@@ -129,32 +129,6 @@ const HomePage = () => {
                 ))}
               </div>
 
-              {/* <div className="space-y-2">
-                <p className="flex items-center gap-2"  >
-                  <Rocket className="w-4 h-4" /> Amazon
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Facebook
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Google
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Microsoft
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Apple
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Netflix
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Tesla
-                </p>
-                <p className="flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> Adobe
-                </p>
-              </div> */}
             </div>
           </aside>
         </div>

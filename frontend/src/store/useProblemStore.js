@@ -13,8 +13,7 @@ export const useProblemStore = create((set) => ({
   getAllProblems: async () => {
     try {
       set({ isProblemsLoading: true });
-
-      const res = await axiosInstance.get("/problems/get-all-problems");
+           const res = await axiosInstance.get("/problems/get-all-problems");
 
       set({ problems: res.data.problems });
     } catch (error) {
@@ -27,9 +26,7 @@ export const useProblemStore = create((set) => ({
   getProblemById: async (id) => {
     try {
       set({ isProblemLoading: true });
-
-      const res = await axiosInstance.get(`/problems/get-problem/${id}`);
-
+      const res = await axiosInstance.get(`/problems/get-problem/${id}`);     
       set({ problem: res.data.problem });
       toast.success(res.data.message);
     } catch (error) {
@@ -52,6 +49,22 @@ export const useProblemStore = create((set) => ({
     } catch (error) {
       console.log("error getting all solved problems", error);
       toast.error("Error in getting solved problem");
+    } finally {
+      set({ isProblemLoading: false });
+    }
+  },
+  addCompanyTag: async (problemsids, companyTags) => {
+    try {
+      set({ isProblemLoading: true });
+      const res = await axiosInstance.post("/problems/add-to-company-tags", {
+        problemsids,
+        companyTags
+      });
+
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("error adding company tag", error);
+      toast.error("Error in adding company tag");
     } finally {
       set({ isProblemLoading: false });
     }

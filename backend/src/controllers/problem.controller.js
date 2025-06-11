@@ -121,9 +121,14 @@ export const getAllProblems = async (req, res) => {
     });
   }
 };
+let executed = false;
 export const getProblemById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
+    if (executed) return;
+    executed = true;
+
+
     const problem = await db.problem.findUnique({
       where: {
         id,
@@ -135,7 +140,9 @@ export const getProblemById = async (req, res) => {
         success: false,
       });
     }
-    return res.status(200).json({
+
+
+    return res.status(201).json({
       message: "Problem fetched successfully by their id",
       success: true,
       problem,
@@ -291,32 +298,33 @@ export const getSolvedProblemsSolvedByUser = async (req, res) => {
 export const addtoCompanyTags = async (req, res) => {
   try {
     const { problemsids, companyTags } = req.body;
-    console.log(problemsids);
 
-    problemsids.forEach(async (id) => {
-
-      const problem = await db.problem.findUnique({
-        where: {
-          id,
-        },
+    if (problemsids == undefined || companyTags == undefined) {
+      return res.status(500).json({
+        message: "no data found",
       });
-
-      const updatedProblem = await db.problem.update({
-        where: {
-          id: problem.id,
-        },
-        data: {
-          companyTags: [...problem.companyTags, ...companyTags],
-        },
+    }
+    if (problemsids !== undefined && companyTags !== undefined) {
+      problemsids.forEach(async (id) => {
+        const problem = await db.problem.findUnique({
+          where: {
+            id,
+          },
+        });
+        const updatedProblem = await db.problem.update({
+          where: {
+            id: problem.id,
+          },
+          data: {
+            companyTags: [...problem.companyTags, ...companyTags],
+          },
+        });
       });
-
-    });
-
-    return res.status(200).json({
-      message: "Added company tags successfully",
-      success: true,
-      count,
-    });
+      return res.status(200).json({
+        message: "Added company tags successfully",
+        success: true,
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       message: "Error adding company tags to problem",

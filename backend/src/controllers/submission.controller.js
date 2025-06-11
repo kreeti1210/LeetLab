@@ -1,13 +1,16 @@
 import { db } from "../libs/db.js";
+let executed = false;
 export const getAllSubmissionsforaUser= async (req, res) => { //is userid ke sare submission nikalo leetlab se
     try {
         const userId= req.user.id;
+        if (executed) return;
+        executed = true;
         const submissions = await db.submission.findMany({
             where:{
                 userId:userId
             }
         })
-        res.status(200).json({
+       return res.status(200).json({
             success:true,
             message:"All submissions by particular user fetched successfully!",
             submissions
@@ -32,7 +35,7 @@ export const getallSubmissionForProblembyUser  = async (req, res) => { //is user
             problemId:problemId
           },
         });
-          res.status(200).json({
+         return res.status(200).json({
             success: true,
             message: "all submissions for a problem by user fetched successfully!",
             submissions,
