@@ -9,6 +9,8 @@ export const useProblemStore = create((set) => ({
   isProblemLoading: null,
   solvedProblems: null,
   totalSolvedProblems: null,
+  isDeletingProblem: null,
+  isUpdatingProblem: null,
 
   getAllProblems: async () => {
     try {
@@ -28,7 +30,7 @@ export const useProblemStore = create((set) => ({
       set({ isProblemLoading: true });
       const res = await axiosInstance.get(`/problems/get-problem/${id}`);     
       set({ problem: res.data.problem });
-      toast.success(res.data.message);
+   
     } catch (error) {
       console.log("Error getting all problems", error);
       toast.error("Error in getting problems");
@@ -69,4 +71,36 @@ export const useProblemStore = create((set) => ({
       set({ isProblemLoading: false });
     }
   },
+  deleteProblem: async (id) => {
+    try {
+      set({ isDeletingProblem: true });
+     const res= await axiosInstance.delete(
+        `/problems/delete-problem/${id}`
+      );
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("Error deleting problem", error);
+      toast.error("Error deleting problem");
+      
+    }
+    finally{
+      set({ isDeletingProblem: false });
+    }
+  },
+  updateProblem: async (id, data) => {
+    try {
+      set({ isUpdatingProblem: true });
+     const res= await axiosInstance.put(
+        `/problems/update-problem/${id}`,data
+      );
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log("Error updating problem", error);
+      toast.error("Error updating problem");
+      
+    }
+    finally{
+      set({ isUpdatingProblem: false });
+    }
+  }
 }));

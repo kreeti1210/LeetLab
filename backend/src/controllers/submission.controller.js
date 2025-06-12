@@ -1,10 +1,9 @@
 import { db } from "../libs/db.js";
-let executed = false;
+
 export const getAllSubmissionsforaUser= async (req, res) => { //is userid ke sare submission nikalo leetlab se
     try {
         const userId= req.user.id;
-        if (executed) return;
-        executed = true;
+        
         const submissions = await db.submission.findMany({
             where:{
                 userId:userId

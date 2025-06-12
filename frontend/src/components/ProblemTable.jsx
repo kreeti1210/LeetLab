@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { usePlayListStore } from "../store/usePlayListStore";
 import {
   Bookmark,
@@ -9,13 +9,18 @@ import {
   TrashIcon,
   Plus,
   Info,
+  Edit,
 } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
+import EditProblemModal from "./editProblemModal";
 import AddToPlayListModel from "../components/AddToPlayListModel";
 import { set } from "react-hook-form";
+import { useProblemStore } from "../store/useProblemStore";
+
 const ProblemTable = ({ problems }) => {
   const { authUser } = useAuthStore();
   const { createPlayList } = usePlayListStore();
+  const { deleteProblem } = useProblemStore();
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
   const [isAddToPlayListModelOpen, setIsAddToPlayListModelOpen] =
     useState(false);
@@ -25,7 +30,12 @@ const ProblemTable = ({ problems }) => {
   const [selectedCompany, setSelectedCompany] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
-
+  const [isDemo, setIsDemo] = useState(false);
+  const [showDeletedModel, setShowDeletedModel] = useState(false);
+  const [deletedProblemId, setDeletedProblemId] = useState(null);
+  const [editedProblemId, setEditedProblemId] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const navigate = useNavigate();
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
     const tagsSet = new Set();
@@ -74,7 +84,20 @@ const ProblemTable = ({ problems }) => {
 
   const difficulties = ["EASY", "MEDIUM", "HARD"];
 
-  const handleDelete = (id) => {};
+  const handleDelete = (id) => {
+    setDeletedProblemId(id);
+    setShowDeletedModel(true);
+  };
+  const handleSureDelete = async () => {
+    deleteProblem(deletedProblemId);
+    setShowDeletedModel(false);
+  };
+  const handleModalClose = () => setShowDeletedModel(false);
+
+  const handleEditProblem = (id) => {
+    setEditedProblemId(id);
+    setIsEditModalOpen(true);
+  };
 
   const handleAddToPlaylist = (problemId) => {
     setSelectedProblemId(problemId);
@@ -83,16 +106,30 @@ const ProblemTable = ({ problems }) => {
   const handleCreatePlayList = async (data) => {
     await createPlayList(data);
   };
+  const handleSolveDemo = () => {
+    setIsDemo(true);
+    navigate("/problem/30f820d7-883b-4d9e-8784-83a309d5ec50", {
+      state: { isDemo: true },
+    });
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto  bg-primary/20 z-20 p-6 rounded-sm mt-10">
       <div className="flex justify-between items-center mb-6 gap-4">
         <div className="flex flex-row gap-3 mr-15   items-center justify-center">
-          <h2 className="text-2xl font-bold">Problems</h2>
+          <h2
+            className="text-2xl font-bold"
+            onClick={() => window.location.reload()}
+          >
+            Problems
+          </h2>
         </div>
         <div className="flex flex-row gap-3">
           <div className="flex flex-row justify-between   gap-3">
-            <button className="btn btn-primary/20 shadow-md hover:bg-primary/20 ">
+            <button
+              className="btn btn-primary/20 shadow-md hover:bg-primary/20 "
+              onClick={() => handleSolveDemo()}
+            >
               Solve Demo
               <div className="relative group">
                 <Info className="w-4 h-4 cursor-pointer" />
@@ -231,7 +268,40 @@ const ProblemTable = ({ problems }) => {
                             >
                               <TrashIcon className="w-4 h-4 text-white" />
                             </button>
-                            <button disabled className="btn btn-sm btn-warning">
+                            {showDeletedModel && (
+                              <div className="fixed inset-0 flex justify-center items-center  bg-gray-900/50">
+                                <div className=" p-4 rounded  shadow-md bg-base-100 ">
+                                  <h2 className=" p-2 font-bold">
+                                    Confirm Deletion
+                                  </h2>
+                                  <p className="p-2 text-sm">
+                                    Are you sure you want to delete this
+                                    problem?
+                                  </p>
+                                  <div className="flex gap-4 mt-5 mr-4 ml-4 items-center mb-3 justify-between">
+                                    <button
+                                      className="px-4 py-2 bg-primary/80 font-semibold rounded text-sm cursor-pointer"
+                                      onClick={() => {
+                                        handleSureDelete();
+                                        setShowDeletedModel(false);
+                                      }}
+                                    >
+                                      Yes, Delete
+                                    </button>
+                                    <button
+                                      className="px-4 py-2 outline rounded text-sm cursor-pointer"
+                                      onClick={handleModalClose}
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            <button
+                              className="btn btn-sm bg-base-200 outline-gray-50"
+                              onClick={() => handleEditProblem(problem.id)}
+                            >
                               <PencilIcon className="w-4 h-4 text-white" />
                             </button>
                           </div>
@@ -285,6 +355,7 @@ const ProblemTable = ({ problems }) => {
       </div>
 
       {/* Creating Model */}
+
       <CreatePlayListModel
         isOpen={isCreateModelOpen} //value of clicked button
         onClose={() => setIsCreateModelOpen(false)}
@@ -294,6 +365,11 @@ const ProblemTable = ({ problems }) => {
         isOpen={isAddToPlayListModelOpen}
         onClose={() => setIsAddToPlayListModelOpen(false)}
         problemId={selectedProblemId}
+      />
+      <EditProblemModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        problemId={editedProblemId} //sending data to backend
       />
     </div>
   );

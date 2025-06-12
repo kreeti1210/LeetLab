@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useParams, Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import {
@@ -32,10 +32,15 @@ import { useSubmissionStore } from "../store/useSubmissionStore";
 import { set } from "react-hook-form";
 import ShareModel from "../components/ShareModel";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+
+import { useAuthStore } from "../store/useAuthStore";
+
 
 const ProblemPage = () => {
   const { id } = useParams();
-  const { getProblemById, problem, isProblemLoading,addCompanyTag } = useProblemStore();
+  const { getProblemById, problem, isProblemLoading, addCompanyTag } =
+    useProblemStore();
   const {
     submission: submissions,
     isLoading: isSubmissionsLoading,
@@ -43,32 +48,57 @@ const ProblemPage = () => {
     getSubmissionCount,
     submissionCount,
   } = useSubmissionStore();
-  
-  useEffect(() => {
-    getProblemById(id);
-    getSubmissionCount(id);
-  }, [id]);
-  
+  const {authUser}=useAuthStore();
 
   const [code, setCode] = useState("");
+
   const [activeTab, setActiveTab] = useState("description");
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testCases, setTestCases] = useState([]);
   const [isShareModelOpen, setIsShareModelOpen] = useState(false);
 
-  const { executeCode, submission, isExecuting } = useExecutionStore();
-    const [darkMode, setDarkMode] = useState(true);
+  const {
+    executeCode,
+    submission,
+    isExecuting,
+    isSubmitting,
+    submitCode,
+    detailedResults,
+    resetExecutionResults,
+  } = useExecutionStore();
+  const [darkMode, setDarkMode] = useState(true);
+  useEffect(() => {
+    getProblemById(id);
+    getSubmissionCount(id);
+    resetExecutionResults(); // Clears old execution results
+  }, [id]);
 
-
-    const [searchCompany, setSearchCompany] = useState("");
-    const [selectedCompany, setSelectedCompany] = useState("");  
-    const companies =["LinkedIn", "HashedIn", "Airtel", "Swiggy", "Nykaa","Myntra","Hotstar","Snapchat"]; 
-    const filteredCompanies = companies.filter((company) =>
-      company.toLowerCase().includes(searchCompany.toLowerCase())
-    ); 
-
-
+  const [searchCompany, setSearchCompany] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("");
+  const companies = [
+    "LinkedIn",
+    "HashedIn",
+    "Airtel",
+    "Swiggy",
+    "Nykaa",
+    "Myntra",
+    "Hotstar",
+    "Snapchat",
+    "Tesla",
+    "Netflix",
+    "Amazon",
+    "Microsoft",
+    "Google",
+    "Meta",
+    "Apple",
+    "Intel",
+    "IBM",
+    "Oracle",
+  ];
+  const filteredCompanies = companies.filter((company) =>
+    company.toLowerCase().includes(searchCompany.toLowerCase())
+  );
 
   useEffect(() => {
     if (problem) {
@@ -82,23 +112,33 @@ const ProblemPage = () => {
       );
     }
   }, [problem, selectedLanguage]);
+
   useEffect(() => {
     if (activeTab === "submissions" && id) {
       getSubmissionsForProblem(id);
     }
   }, [activeTab, id]);
+  const location = useLocation();
+  const isDemo = location.state && location.state.isDemo;
 
-  const handleAddToCompany=(problemid,company) => {   
-    addCompanyTag( [problemid],[company]);
+  useEffect(() => {
+    if (isDemo === true) {
+      setCode(
+        "const fs = require('fs');\n\n// Reading input from stdin (using fs to read all input)\nconst input = fs.readFileSync(0, 'utf-8').trim();\nconst [a, b] = input.split(' ').map(Number);\n\nconsole.log(a + b);"
+      );
+    }
+  }, [isDemo]); 
+
+  const handleAddToCompany = (problemid, company) => {
+    addCompanyTag([problemid], [company]);
   };
-
 
   const handleLanguageChange = (e) => {
     const lang = e.target.value;
     setSelectedLanguage(lang);
     setCode(problem.codeSnippets?.[lang] || "");
   };
-  // return <div> {problem.id}</div>;
+
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -106,9 +146,8 @@ const ProblemPage = () => {
       "data-theme",
       darkMode ? "light" : "dark"
     );
-
   };
- 
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "description":
@@ -170,7 +209,12 @@ const ProblemPage = () => {
           </div>
         );
       case "submissions":
-      return <SubmissionsList submissions={submissions} isLoading={isSubmissionsLoading} />;
+        return (
+          <SubmissionsList
+            submissions={submissions}
+            isLoading={isSubmissionsLoading}
+          />
+        );
       case "discussion":
         return (
           <div className="p-4 text-center text-base-content/70">
@@ -198,9 +242,10 @@ const ProblemPage = () => {
     }
   };
 
-  const handleRunCode = (e) => {
+   const handleRunCode = (e) => {
     e.preventDefault();
     try {
+      resetExecutionResults(); // Reset before execution
       const language_id = getLanguageId(selectedLanguage);
       const stdin = problem.testcases.map((tc) => tc.input);
       const expected_outputs = problem.testcases.map((tc) => tc.output);
@@ -209,6 +254,20 @@ const ProblemPage = () => {
       console.log("Error executing code", error);
     }
   };
+
+  const handleSubmitCode = (e) => {
+    e.preventDefault();
+    try {
+      resetExecutionResults(); // Reset before submission
+      const language_id = getLanguageId(selectedLanguage);
+      const stdin = problem.testcases.map((tc) => tc.input);
+      const expected_outputs = problem.testcases.map((tc) => tc.output);
+      submitCode(code, language_id, stdin, expected_outputs, id);
+    } catch (error) {
+      console.log("Error submitting code", error);
+    }
+  };
+
   if (isProblemLoading || !problem) {
     return (
       <div className="flex items-center justify-center h-screen bg-base-200">
@@ -249,7 +308,7 @@ const ProblemPage = () => {
             </div>
           </div>
         </div>
-
+        {authUser?.role === "ADMIN" && (
         <div className="relative mr-2 flex flex-row items-center rounded border p-2">
           <input
             type="text"
@@ -294,7 +353,7 @@ const ProblemPage = () => {
               // Hides dropdown
             }}
           />
-        </div>
+        </div>)}
 
         <div className="flex-none gap-4">
           <button
@@ -429,7 +488,13 @@ const ProblemPage = () => {
                     {!isExecuting && <Play className="w-4 h-4" />}
                     Run Code
                   </button>
-                  <button className="btn btn-success gap-2">
+                  <button
+                    className={`btn btn-success gap-2 ${
+                      isSubmitting ? "loading" : ""
+                    } `}
+                    onClick={handleSubmitCode}
+                    disabled={isSubmitting}
+                  >
                     Submit Solution
                   </button>
                 </div>
@@ -451,17 +516,45 @@ const ProblemPage = () => {
                   <table className="table table-zebra w-full">
                     <thead>
                       <tr>
+                        <th>Test Case</th>
                         <th>Input</th>
                         <th>Expected Output</th>
+                        <th>Actual Output</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {testCases.map((testCase, index) => (
-                        <tr key={index}>
-                          <td className="font-mono">{testCase.input}</td>
-                          <td className="font-mono">{testCase.output}</td>
-                        </tr>
-                      ))}
+                      {detailedResults && detailedResults.length > 0
+                        ? detailedResults.map((result, index) => (
+                            <tr key={index}>
+                              <td className="font-mono">{result.testCase}</td>
+                              <td className="font-mono">
+                                {testCases[index]?.input || "N/A"}
+                              </td>
+                              <td className="font-mono">{result.expected}</td>
+                              <td className="font-mono">{result.stdout}</td>
+                              <td
+                                className={`font-mono ${
+                                  result.passed === true
+                                    ? "text-green-500"
+                                    : "text-red-500"
+                                }`}
+                              >
+                                {result.passed === true
+                                  ? "Accepted"
+                                  : "Wrong Answer"}
+                              </td>
+                            </tr>
+                          ))
+                        : testCases.map((testCase, index) => (
+                            <tr key={index}>
+                              <td className="font-mono">{index + 1}</td>
+                              <td className="font-mono">{testCase.input}</td>
+                              <td className="font-mono">{testCase.output}</td>
+                              <td className="font-mono">-</td>
+                              <td className="font-mono">-</td>
+                            </tr>
+                          ))}
                     </tbody>
                   </table>
                 </div>

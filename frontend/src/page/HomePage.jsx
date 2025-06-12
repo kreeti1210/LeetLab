@@ -7,7 +7,7 @@ import ProblemPage from "./ProblemPage";
 import { Navigate,useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const { getAllProblems, problems, isProblemsLoading } =
+  const { getAllProblems, problems, isProblemsLoading, getProblemById } =
     useProblemStore();
     const navigate = useNavigate();
   const { authUser } = useAuthStore();
@@ -102,7 +102,7 @@ const HomePage = () => {
 
             <div className="p-4 rounded-lg shadow-md bg-primary/30 text-white mt-4 flex flex-col">
               <h2 className="text-lg font-semibold mb-1">
-                🏢 Top Companies Problems
+                🏢 Top Companies Tags
               </h2>
               <div className="space-y-2">
                 {[
@@ -116,7 +116,7 @@ const HomePage = () => {
                   "Adobe",
                 ].map((company) => (
                   <p
-                  
+                                 
                     className={`flex items-center gap-2 cursor-pointer hover:text-primary ${
                       selectedCompany === company
                         ? "font-bold text-primary"

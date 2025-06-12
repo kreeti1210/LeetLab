@@ -121,13 +121,10 @@ export const getAllProblems = async (req, res) => {
     });
   }
 };
-let executed = false;
+
 export const getProblemById = async (req, res) => {
   const { id } = req.params;
   try {
-    if (executed) return;
-    executed = true;
-
 
     const problem = await db.problem.findUnique({
       where: {
@@ -153,6 +150,7 @@ export const getProblemById = async (req, res) => {
       success: false,
     });
   }
+ 
 };
 export const updateProblem = async (req, res) => {
   //id nikalo
