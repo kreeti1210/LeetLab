@@ -302,7 +302,7 @@ const ProblemTable = ({ problems }) => {
                               className="btn btn-sm bg-base-200 outline-gray-50"
                               onClick={() => handleEditProblem(problem.id)}
                             >
-                              <PencilIcon className="w-4 h-4 text-white" />
+                              <PencilIcon className="w-4 h-4" />
                             </button>
                           </div>
                         )}
