@@ -36,6 +36,9 @@ const ProblemTable = ({ problems }) => {
   const [editedProblemId, setEditedProblemId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
+  const difficulties = ["EASY", "MEDIUM", "HARD"];
+
+
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
     const tagsSet = new Set();
@@ -46,10 +49,9 @@ const ProblemTable = ({ problems }) => {
   const allCompanyTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
     const companyTagsSet = new Set();
-
     problems.forEach((p) =>
       p.companyTags?.forEach((t) =>
-        companyTagsSet.add(t.charAt(0).toUpperCase() + t.slice(1).toLowerCase())
+        companyTagsSet.add(t)
       )
     );
     return Array.from(companyTagsSet);
@@ -82,7 +84,7 @@ const ProblemTable = ({ problems }) => {
     );
   }, [filteredProblems, currentPage]);
 
-  const difficulties = ["EASY", "MEDIUM", "HARD"];
+ 
 
   const handleDelete = (id) => {
     setDeletedProblemId(id);
@@ -118,14 +120,14 @@ const ProblemTable = ({ problems }) => {
       <div className="flex justify-between items-center mb-6 gap-4">
         <div className="flex flex-row gap-3 mr-15   items-center justify-center">
           <h2
-            className="text-2xl font-bold"
+            className="text-2xl font-bold cursor-pointer"
             onClick={() => window.location.reload()}
           >
             Problems
           </h2>
         </div>
         <div className="flex flex-row gap-3">
-          <div className="flex flex-row justify-between   gap-3">
+          <div className="flex flex-row justify-between gap-3">
             <button
               className="btn btn-primary/20 shadow-md hover:bg-primary/20 "
               onClick={() => handleSolveDemo()}
@@ -167,7 +169,7 @@ const ProblemTable = ({ problems }) => {
               <option value="ALL">All Companies</option>
               {allCompanyTags.map((tag) => (
                 <option key={tag} value={tag}>
-                  {tag}
+                  {tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase()}
                 </option>
               ))}
             </select>

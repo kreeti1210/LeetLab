@@ -56,7 +56,7 @@ const LoginPage = () => {
             {/* Email */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Email</span>
+                <span className="label-text font-medium pb-1">Email</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -81,7 +81,7 @@ const LoginPage = () => {
             {/* Password */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Password</span>
+                <span className="label-text font-medium pb-1">Password</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -97,7 +97,7 @@ const LoginPage = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-3  flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -117,7 +117,7 @@ const LoginPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn btn-primary w-full flex items-center justify-center gap-2"
               disabled={isLoggingIn}
             >
               {isLoggingIn ? (

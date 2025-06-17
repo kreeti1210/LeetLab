@@ -35,7 +35,7 @@ const EditProblemModal = ({ isOpen, onClose, problemId }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-base-300 bg-opacity-50">
       <div className="bg-base-100 rounded-lg shadow-xl w-full md:w-1/2 ">
         <div className="p-4 md:p-6 flex flex-col gap-4">
           <div className="flex items-center justify-between">

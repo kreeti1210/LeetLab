@@ -7,7 +7,10 @@ const About = () => {
     <div className="min-h-screen from-base-300 to-base-200 max-w-7xl w-full">
       <nav className="navbar bg-base-100 shadow-lg px-4">
         <div className="flex-1 gap-2 container items-center flex flex-row">
-          <Link to={"/"} className="flex items-center gap-2 text-primary">
+          <Link
+            to={"/"}
+            className="flex items-center gap-2  text-primary"
+          >
             <Home className="w-10 h-10" />
             <ChevronLeft className="w-4 h-4" />
           </Link>
@@ -21,9 +24,9 @@ const About = () => {
             About <span className="text-primary">LeetLab</span>
           </h1>
           <p className="text-gray-400 text-lg leading-relaxed">
-            LeetLab is a **beginner-friendly** coding platform inspired by
+            LeetLab is a <b>beginner-friendly</b> coding platform inspired by
             LeetCode, designed to help developers prepare for technical
-            interviews with **interactive coding challenges**.
+            interviews with <b>interactive coding challenges</b>.
           </p>
 
           <div className="mt-6 flex flex-col md:flex-row gap-4">

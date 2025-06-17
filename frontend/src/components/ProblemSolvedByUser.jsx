@@ -48,7 +48,7 @@ const ProblemSolvedByUser = () => {
   return (
     <div className="p-4 bg-base-200 ">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-primary mb-6">
+        <h2 className="text-2xl pl-2  font-bold text-primary mb-6">
           Problems Solved
         </h2>
 
@@ -79,7 +79,7 @@ const ProblemSolvedByUser = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {solvedProblems?.map((problem) => (
+                  {solvedProblems?.slice(0, 5).map((problem) => (
                     <tr key={problem.id} className="hover">
                       <td className="font-medium">{problem.title}</td>
                       <td>{getDifficultyBadge(problem.difficulty)}</td>
@@ -100,7 +100,7 @@ const ProblemSolvedByUser = () => {
                       <td className="text-center">
                         <div className="flex justify-center">
                           <Link
-                            to={`/problems/${problem.id}`}
+                            to={`/problem/${problem.id}`}
                             className="btn btn-sm btn-outline btn-primary"
                           >
                             <ExternalLink size={14} className="mr-1" />
@@ -131,19 +131,19 @@ const ProblemSolvedByUser = () => {
         {/* Stats Cards */}
         {solvedProblems?.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div className="stat bg-base-100 shadow rounded-box">
+            <div className="stat bg-base-100 shadow rounded-2xl">
               <div className="stat-title">Easy</div>
               <div className="stat-value text-success">
                 {solvedProblems.filter((p) => p.difficulty === "EASY").length}
               </div>
             </div>
-            <div className="stat bg-base-100 shadow rounded-box">
+            <div className="stat bg-base-100 shadow rounded-2xl">
               <div className="stat-title">Medium</div>
               <div className="stat-value text-warning">
                 {solvedProblems.filter((p) => p.difficulty === "MEDIUM").length}
               </div>
             </div>
-            <div className="stat bg-base-100 shadow rounded-box">
+            <div className="stat bg-base-100 shadow rounded-2xl">
               <div className="stat-title">Hard</div>
               <div className="stat-value text-error">
                 {solvedProblems.filter((p) => p.difficulty === "HARD").length}

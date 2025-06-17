@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { usePlayListStore } from "../store/usePlayListStore";
 import { useAuthStore } from "../store/useAuthStore"; 
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import {
   BookOpen,
   ChevronDown,
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
 
+
 const PlaylistProfile = () => {
   const { authUser } = useAuthStore();
 
@@ -20,6 +21,7 @@ const PlaylistProfile = () => {
   const [expandedPlaylist, setExpendedPlaylist] = useState(null);
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
   const { createPlayList } = usePlayListStore();
+
    
   useEffect(() => {
     getAllPlayLists();
@@ -59,6 +61,7 @@ const PlaylistProfile = () => {
     await createPlayList(data);
    
   };
+ 
 
 
   return (
@@ -67,12 +70,12 @@ const PlaylistProfile = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-primary">My Playlists</h2>
           <button
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-sm mr-2"
             onClick={() => {
               setIsCreateModelOpen(true);
             }}
           >
-            Create Playlist
+            Add Another Playlist
           </button>
           <CreatePlayListModel
             isOpen={isCreateModelOpen} //value of clicked button
@@ -81,7 +84,7 @@ const PlaylistProfile = () => {
           />
         </div>
 
-        {playlists === null ? (
+        {playlists === null || playlists.length === 0 ? (
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body items-center text-center">
               <h3 className="text-xl font-medium">No playlists found</h3>
@@ -89,7 +92,14 @@ const PlaylistProfile = () => {
                 Create your first playlist to organize problems!
               </p>
               <div className="card-actions justify-center mt-4">
-                <button className="btn btn-primary">Create Playlist</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setIsCreateModelOpen(true);
+                  }}
+                >
+                  Create Playlist
+                </button>
               </div>
             </div>
           </div>
@@ -104,20 +114,20 @@ const PlaylistProfile = () => {
                     onClick={() => togglePlayList(playlist.id)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="avatar placeholder flex items-center justify-center">
-                        <div className="bg-primary text-primary-content rounded-lg w-12 items-center">
-                          <BookOpen size={24} />
+                      <div className="avatar placeholder flex items-center justify-center pl-2 pr-1">
+                        <div className="bg-primary text-primary-content rounded-lg w-12  items-center">
+                          <BookOpen
+                            size={24}
+                            className="cursor-pointer text-center align-center justify-center m-3"
+                          />
                         </div>
                       </div>
                       <div>
                         <h3 className="text-xl font-bold">{playlist.name}</h3>
-                        <div className="flex items-center gap-2 mt-1 text-sm text-base-content/70">
+                        <div className="flex items-center gap-2  mb-1 text-sm text-base-content/70">
                           <div className="flex items-center gap-1">
                             <List size={14} />
-                            <span>
-                              {playlist.problems?.length}{" "}
-                              problems
-                            </span>
+                            <span>{playlist.problems?.length} problems</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Clock size={14} />
@@ -137,19 +147,16 @@ const PlaylistProfile = () => {
                     </button>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-base-content/80 mt-1">
-                    {playlist.description}
+                  <p className="text-base-content/80 mt-2 ml-2 mb-1 text-sm">
+                    {playlist.description.charAt(0).toUpperCase() +
+                      playlist.description.slice(1).toLowerCase()}
                   </p>
 
                   {/* Expanded Problems List */}
                   {expandedPlaylist === playlist.id && (
-                    <div className="mt-4 pt-4 border-t border-base-300">
-                      <h4 className="text-lg font-semibold mb-3">
-                        Problems in this playlist
-                      </h4>
-
-                      {playlist.problems === null ? (
+                    <div className="mt-2 pt-1 border-t border-base-300">
+                      {playlist.problems === null ||
+                      playlist.problems.length === 0 ? (
                         <div className="alert">
                           <span>No problems added to this playlist yet.</span>
                         </div>
@@ -205,10 +212,16 @@ const PlaylistProfile = () => {
                         </div>
                       )}
 
-                      <div className="flex justify-between items-center mt-4">
+                      <div className="flex gap-2 justify-end items-center mt-6">
+                        <button
+                          onClick={() => (window.location.href = `/`)}
+                          className="btn btn-sm btn-primary"
+                        >
+                          Add Problem
+                        </button>
                         <button
                           onClick={() => handleDelete(playlist.id)}
-                          className="btn btn-sm btn-error"
+                          className="btn btn-sm btn-outline"
                         >
                           Delete Playlist
                         </button>

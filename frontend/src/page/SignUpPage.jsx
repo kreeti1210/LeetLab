@@ -54,12 +54,12 @@ const SignUpPage = () => {
           {/* Form */}
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6 p-4 rounded-xl border border-base-300 shadow shadow-grey-400/100"
+            className="space-y-4 p-4 rounded-xl border border-base-300 shadow shadow-grey-400/100"
           >
             {/* name */}
             <div className="form-control ">
               <label className="label">
-                <span className="label-text mb-1 font-medium">Name</span>
+                <span className="label-text mb-1 font-medium pb-1">Name</span>
               </label>
               <div className="relative">
                 <input
@@ -81,7 +81,7 @@ const SignUpPage = () => {
             {/* Email */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text mb-1 font-medium">Email</span>
+                <span className="label-text mb-1 font-medium pb-1">Email</span>
               </label>
               <div className="relative">
                 <input
@@ -90,7 +90,7 @@ const SignUpPage = () => {
                   className={`input input-bordered w-full ${
                     errors.email ? "input-error" : ""
                   }`}
-                  placeholder="you@email.com"
+                  placeholder="your@email.com"
                 />
               </div>
               {errors.email && (
@@ -103,7 +103,9 @@ const SignUpPage = () => {
             {/* Password */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text mb-1 font-medium">Password</span>
+                <span className="label-text mb-1 font-medium pb-1">
+                  Password
+                </span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -139,7 +141,7 @@ const SignUpPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn btn-primary w-full mt-2"
               disabled={isSigninUp}
             >
               {isSigninUp ? (

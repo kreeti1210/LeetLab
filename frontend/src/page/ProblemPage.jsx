@@ -130,7 +130,7 @@ const ProblemPage = () => {
   }, [isDemo]); 
 
   const handleAddToCompany = (problemid, company) => {
-    addCompanyTag([problemid], [company]);
+    addCompanyTag([problemid], [company.toLowerCase().trim()]);
   };
 
   const handleLanguageChange = (e) => {

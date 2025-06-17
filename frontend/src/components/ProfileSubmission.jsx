@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useMemo } from "react";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import {
   Code,
@@ -16,7 +16,7 @@ const ProfileSubmission = () => {
   const { submissions, getAllSubmissions } = useSubmissionStore();
   const [expandedSubmission, setExpandedSubmission] = useState(null);
   const [filter, setFilter] = useState("all");
-
+   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     getAllSubmissions();
   }, [getAllSubmissions]);
@@ -57,12 +57,20 @@ const ProfileSubmission = () => {
     if (filter === "all") return true;
     return submission.status === filter;
   });
+  const itemsPerPage = 8;
+    const totalPages = Math.ceil(filteredSubmissions.length / itemsPerPage);
+    const paginatedSubmissions = useMemo(() => {
+      return filteredSubmissions.slice(
+        (currentPage - 1) * itemsPerPage, // 1 * 5 = 5 ( starting index = 0)
+        currentPage * itemsPerPage // 1 * 5  = (0 , 10)
+      );
+    }, [filteredSubmissions, currentPage]);
 
   return (
     <div className=" bg-base-200 p-4 ">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mt-2 mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-primary mb-4 md:mb-0">
+          <h1 className="text-3xl font-bold pl-2 mb-4 md:mb-0">
             My Submissions
           </h1>
 
@@ -121,7 +129,7 @@ const ProfileSubmission = () => {
           </div>
         </div>
         <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 mt-6 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 mt-6 mb-6">
             <div className="stat bg-base-100 shadow">
               <div className="stat-title">Total</div>
               <div className="stat-value">{submissions?.length}</div>
@@ -130,6 +138,13 @@ const ProfileSubmission = () => {
               <div className="stat-title">Accepted</div>
               <div className="stat-value text-success">
                 {submissions?.filter((s) => s.status === "Accepted").length}
+              </div>
+            </div>
+            <div className="stat bg-base-100 shadow ">
+              <div className="stat-title">Failed</div>
+              <div className="stat-value text-error">
+                {submissions?.length -
+                  submissions?.filter((s) => s.status === "Accepted").length}
               </div>
             </div>
           </div>
@@ -146,7 +161,7 @@ const ProfileSubmission = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {filteredSubmissions.map((submission) => (
+            {paginatedSubmissions.map((submission) => (
               <div
                 key={submission.id}
                 className="card bg-base-100 shadow-xl overflow-hidden transition-all duration-300"
@@ -278,6 +293,27 @@ const ProfileSubmission = () => {
                 </div>
               </div>
             ))}
+            <div className="flex justify-center mt-6 items-center  gap-2">
+              <div className=" outline shadow-sm  btn-group rounded-sm">
+                <button
+                  className="btn btn-sm"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((prev) => prev - 1)}
+                >
+                  Prev
+                </button>
+                <span className="btn btn-ghost btn-sm">
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  className="btn btn-sm"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

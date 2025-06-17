@@ -17,14 +17,15 @@ const HomePage = () => {
   useEffect(() => {
     getSolvedProblemByUser();
   }, [getSolvedProblemByUser]);
+  
+  useEffect(() => {
+    getAllProblems();
+  }, [getAllProblems]);
 
   const handleRecommendedproblems = (problemId) => {
     navigate(`/problem/${problemId}`);
   };
 
-  useEffect(() => {
-    getAllProblems();
-  }, [getAllProblems]);
 
   if (isProblemsLoading) {
     return (
@@ -34,13 +35,13 @@ const HomePage = () => {
     );
   }
   const handleCompanySelect = (company) => {
+   
     setSelectedCompany(company);
   };
   const filteredProblems = selectedCompany.toLowerCase()
     ? problems.filter((problem) =>
         problem.companyTags?.includes(selectedCompany)
-      )
-    : problems;
+      ): problems;
 
    
     
@@ -91,22 +92,21 @@ const HomePage = () => {
               <p className="text-gray-300 mt-3 mb-2 text-center text-sm">
                 {totalSolvedProblems} out of {problems.length} problems solved
               </p>
-       
             </div>
 
             <div className="p-4 rounded-lg shadow-md bg-primary/30 text-white mt-4 flex  ">
               <div>
-                <h2 className="text-lg font-semibold mb-1">
+                <h2 className="text-sm font-bold mb-2">
                   <span className="mr-1">📌</span>FAANG Recommended
                 </h2>
                 <ul>
-                  {problems.slice(11, 14).map((problem) => (
+                  {problems.slice(12, 15).map((problem) => (
                     <li key={problem.id}>
                       <span
-                        className=" hover:underline cursor-pointer text-sm"
+                        className=" hover:underline-offset-2 cursor-pointer text-gray-200"
                         onClick={() => handleRecommendedproblems(problem.id)}
                       >
-                        📝{problem.title}
+                        📝 {problem.title}
                       </span>
                     </li>
                   ))}
@@ -115,7 +115,7 @@ const HomePage = () => {
             </div>
 
             <div className="p-4 rounded-lg shadow-md bg-primary/30 text-white mt-4 flex flex-col">
-              <h2 className="text-lg font-semibold mb-1">
+              <h2 className="text-lg font-semibold mb-1 ">
                 🏢 Top Companies Tags
               </h2>
               <div className="space-y-2">
@@ -128,6 +128,8 @@ const HomePage = () => {
                   "LinkedIn",
                   "Tesla",
                   "Adobe",
+                  "Uber",
+                  "Patanjali",
                 ].map((company) => (
                   <p
                     className={`flex items-center gap-2 cursor-pointer hover:text-primary ${

@@ -21,7 +21,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
   };
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-base-300 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-base-100 rounded-lg shadow-xl w-full max-w-md">
         <div className="flex justify-between items-center p-4 border-b border-base-300">
           <h3 className="text-xl font-bold">Create New Password</h3>
@@ -82,7 +82,7 @@ const ChangePasswordPopup = ({ isOpen, onClose, onSubmit }) => {
               Back
             </button>{" "}
             <div className="flex justify-end gap-2 ">
-              <button type="submit" className="btn btn-primary" >
+              <button type="submit" className="btn btn-primary">
                 Submit
               </button>
             </div>

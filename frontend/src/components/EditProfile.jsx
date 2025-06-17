@@ -27,7 +27,7 @@ const EditProfile = ({ isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-base-300 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-base-100 rounded-lg shadow-xl w-full max-w-md">
         <div className="flex justify-between items-center p-4 border-b border-base-300">
           <h3 className="text-xl font-bold">Edit Profile</h3>
@@ -93,7 +93,10 @@ const EditProfile = ({ isOpen, onClose, onSubmit }) => {
               <Star className="w-4.5 h-5 "></Star>
               Upgrade to Premium
             </button>
-            <UpgradePremium isOpen={isPremium} onClose={() => setIsPremium(false)} />
+            <UpgradePremium
+              isOpen={isPremium}
+              onClose={() => setIsPremium(false)}
+            />
           </div>
 
           {/* Action Buttons */}
