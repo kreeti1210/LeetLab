@@ -50,6 +50,8 @@ export const useAuthStore = create((set) => ({
       localStorage.setItem("token", res.data.token);
       set({ authUser: res.data.user });
       console.log(res.data.user);
+      console.log(res.data.token);
+      console.log(res.token);
       
       toast.success(res.data.message);
     } catch (error) {
