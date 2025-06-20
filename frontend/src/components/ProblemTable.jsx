@@ -12,7 +12,7 @@ import {
   Edit,
 } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
-import EditProblemModal from "./editProblemModal";
+import EditProblemModal from "./EditProblemModal";
 import AddToPlayListModel from "../components/AddToPlayListModel";
 import { set } from "react-hook-form";
 import { useProblemStore } from "../store/useProblemStore";
