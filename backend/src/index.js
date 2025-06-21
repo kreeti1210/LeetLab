@@ -15,7 +15,8 @@ app.use(express.json());
 app.use(cookieparser());
 app.use(
   cors({
-    origin: process.env.VERCEL_URL,
+    // origin: process.env.VERCEL_URL,
+    origin: "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
