@@ -11,7 +11,9 @@ export const useSubmissionStore = create((set, get) => ({
   getAllSubmissions: async () => {
     try {
       set({ isSubmissionLoading: true });
-      const res = await axiosInstance.get("/submission/get-all-submissions");
+      const res = await axiosInstance.get("/submission/get-all-submissions", {
+        withCredentials: true,
+      });
       set({ submissions: res.data.submissions });
     
     } catch (error) {
@@ -26,7 +28,10 @@ export const useSubmissionStore = create((set, get) => ({
     try {
       set({ isSubmissionLoading: true });
       const res = await axiosInstance.get(
-        `/submission/get-submissions/${problemId}`
+        `/submission/get-submissions/${problemId}`,
+        {
+          withCredentials: true,
+        }
       );
       set({ submission: res.data.submissions });
     } catch (error) {

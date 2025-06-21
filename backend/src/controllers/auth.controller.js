@@ -107,13 +107,45 @@ export const logout = async (req, res) => {
 };
 export const check = async (req, res) => {
   try {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No token found" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await db.user.findUnique({
+      where: {
+        id: decoded.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        image: true,
+      },
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
     res.status(200).json({
       success: true,
       message: "User authenticated successfully",
-      user: req.user,
+      user,
     });
   } catch (error) {
-    res.status(501).json({ message: "not logged in", error });
+    console.error("Check route error:", error);
+    res
+      .status(401)
+      .json({ success: false, message: "Invalid or expired token", error });
   }
 };
 export const forgetPassword = async (req, res) => {

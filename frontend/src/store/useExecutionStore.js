@@ -55,7 +55,10 @@ export const useExecutionStore = create((set) => ({
         stdin,
         expected_outputs,
         problemId,
+      },{
+        withCredentials: true,
       });
+
       set({ submission: res.data.submission });
       toast.success(res.data.message);
     } catch (error) {

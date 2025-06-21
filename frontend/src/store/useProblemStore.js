@@ -15,7 +15,9 @@ export const useProblemStore = create((set) => ({
   getAllProblems: async () => {
     try {
       set({ isProblemsLoading: true });
-           const res = await axiosInstance.get("/problems/get-all-problems");
+           const res = await axiosInstance.get("/problems/get-all-problems", {
+             withCredentials: true,
+           });
 
       set({ problems: res.data.problems });
     } catch (error) {
@@ -28,7 +30,9 @@ export const useProblemStore = create((set) => ({
   getProblemById: async (id) => {
     try {
       set({ isProblemLoading: true });
-      const res = await axiosInstance.get(`/problems/get-problem/${id}`);     
+      const res = await axiosInstance.get(`/problems/get-problem/${id}`, {
+        withCredentials: true,
+      });     
       set({ problem: res.data.problem });
    
     } catch (error) {
@@ -41,7 +45,9 @@ export const useProblemStore = create((set) => ({
   getSolvedProblemByUser: async () => {
     try {
       set({ isProblemLoading: true });
-      const res = await axiosInstance.get("/problems/get-solved-problems");
+      const res = await axiosInstance.get("/problems/get-solved-problems", {
+        withCredentials: true,
+      });
       set({
         solvedProblems: res.data.problems,
       });
@@ -58,10 +64,16 @@ export const useProblemStore = create((set) => ({
   addCompanyTag: async (problemsids, companyTags) => {
     try {
       set({ isProblemLoading: true });
-      const res = await axiosInstance.post("/problems/add-to-company-tags", {
-        problemsids,
-        companyTags
-      });
+      const res = await axiosInstance.post(
+        "/problems/add-to-company-tags",
+        {
+          problemsids,
+          companyTags,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success(res.data.message);
     } catch (error) {
@@ -74,9 +86,9 @@ export const useProblemStore = create((set) => ({
   deleteProblem: async (id) => {
     try {
       set({ isDeletingProblem: true });
-     const res= await axiosInstance.delete(
-        `/problems/delete-problem/${id}`
-      );
+     const res = await axiosInstance.delete(`/problems/delete-problem/${id}`, {
+       withCredentials: true,
+     });
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error deleting problem", error);
@@ -90,9 +102,13 @@ export const useProblemStore = create((set) => ({
   updateProblem: async (id, data) => {
     try {
       set({ isUpdatingProblem: true });
-     const res= await axiosInstance.put(
-        `/problems/update-problem/${id}`,data
-      );
+     const res = await axiosInstance.put(
+       `/problems/update-problem/${id}`,
+       data,
+       {
+         withCredentials: true,
+       }
+     );
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error updating problem", error);
