@@ -148,6 +148,7 @@ export const check = async (req, res) => {
       .json({ success: false, message: "Invalid or expired token", error });
   }
 };
+
 export const forgetPassword = async (req, res) => {
   try {
     const { email, oldPassword, newPassword, confirmPassword } = req.body;
