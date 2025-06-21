@@ -10,13 +10,23 @@ import dotenv from "dotenv"
 import healthcheckRoutes from "./routes/healthcheck.route.js";
 dotenv.config();    
 const app=express();
+const allowedOrigins = [
+  "https://leetlab-orcin.vercel.app", // production
+  "https://leetlab-git-dev-debug-kreeti1210s-projects.vercel.app", // preview
+  "http://localhost:5173", // local dev
+];
 
 app.use(express.json());
 app.use(cookieparser());
 app.use(
   cors({
-    // origin: process.env.VERCEL_URL,
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
