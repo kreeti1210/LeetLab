@@ -10,17 +10,13 @@ import dotenv from "dotenv"
 import healthcheckRoutes from "./routes/healthcheck.route.js";
 dotenv.config();    
 const app=express();
-const allowedOrigins = [
-  "https://leetlab-o5mw.onrender.com", // production
-  "https://leetlab-git-dev-debug-kreeti1210s-projects.vercel.app", // preview
-  "http://localhost:5173", // local dev
-];
+
 
 app.use(express.json());
 app.use(cookieparser());
 app.use(
   cors({
-    origin: process.env.VERCEL_URL,
+    origin: process.env.VERCEL_URL || "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
