@@ -11,7 +11,7 @@ import healthcheckRoutes from "./routes/healthcheck.route.js";
 dotenv.config();    
 const app=express();
 const allowedOrigins = [
-  "https://leetlab-orcin.vercel.app", // production
+  "https://leetlab-o5mw.onrender.com", // production
   "https://leetlab-git-dev-debug-kreeti1210s-projects.vercel.app", // preview
   "http://localhost:5173", // local dev
 ];
