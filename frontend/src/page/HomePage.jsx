@@ -100,7 +100,7 @@ const HomePage = () => {
                   <span className="mr-1">📌</span>FAANG Recommended
                 </h2>
                 <ul>
-                  {problems.slice(12, 15).map((problem) => (
+                  {problems.slice(0, 3).map((problem) => (
                     <li key={problem.id}>
                       <span
                         className=" hover:underline-offset-2 cursor-pointer text-gray-200"
