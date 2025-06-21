@@ -19,11 +19,11 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import Contact from "./components/Contact";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, isCheckingAuth } = useAuthStore();
 
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+  // useEffect(() => {
+  //   checkAuth();
+  // }, [checkAuth]);
 
   if (isCheckingAuth && !authUser) {
     return (
