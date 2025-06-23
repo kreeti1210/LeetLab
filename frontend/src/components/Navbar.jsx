@@ -1,52 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { User, Code, LogOut, Folder, Search, Sun, Moon,Trophy,Flame } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
+import { useProblemStore } from "../store/useProblemStore";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
   const [darkMode, setDarkMode] = useState(true);
   const [dailyChallenge, setDailyChallenge] = useState(null);
+  const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
 
   useEffect(() => {
-    // Simulating a daily challenge fetch
-    const challenges = [
-      {
-        title: "Factorial Calculation",
-        link: "/problem/c82e343b-1a53-4a60-81c8-a9c2e803bffc",
-      },
-      {
-        title: "Valid Palindrome",
-        link: "/problem/6c47d30e-5706-4d43-a96f-f6741382558b",
-      },
-      {
-        title: "Find the Maximum in an Array",
-        link: "/problem/a1b35145-3340-4fb5-ad20-49508f25cc93",
-      },
-      {
-        title: "Climbing Stairs",
-        link: "/problem/a49ec604-0a4c-43c5-b567-21b79502811b",
-      },
-      {
-        title: "Check Even or Odd",
-        link: "/problem/cb75fc5a-69a4-471c-8ade-e86fed4fc23e",
-      },
-      {
-        title: "Reverse String",
-        link: "/problem/96af425a-d227-47f1-9b9b-dbf44ed5d7b4",
-      },
-      {
-        title: "Reverse an Array",
-        link: "/problem/a9bd4e34-5e06-494f-a31b-612db9cf33e0",
-      },
-    ];
-    const randomChallenge =
-      challenges[Math.floor(Math.random() * challenges.length)];
-    setDailyChallenge(randomChallenge);
-  }, []);
+    if (problems.length === 0) {
+      getAllProblems();
+    }
+  }, [getAllProblems, problems.length]);
 
-
+  const randomChallengeRef = useRef(null);
+  useEffect(() => {
+    if (problems.length > 0 && !randomChallengeRef.current) {
+      const random = problems[Math.floor(Math.random() * problems.length)];
+      randomChallengeRef.current = {
+        title: random.title,
+        link: `/problem/${random._id}`,
+      };
+      setDailyChallenge(randomChallengeRef.current);
+    }
+  }, [problems]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);

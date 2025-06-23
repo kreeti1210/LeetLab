@@ -7,7 +7,7 @@ import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js"
 import cors from "cors"
 import dotenv from "dotenv"
-import axios from "axios";
+
 import healthcheckRoutes from "./routes/healthcheck.route.js";
 dotenv.config();    
 const app=express();
