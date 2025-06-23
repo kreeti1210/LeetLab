@@ -12,14 +12,15 @@ const Navbar = () => {
   const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
 
   useEffect(() => {
-    if (problems.length === 0) {
+    if (authUser && problems.length === 0) {
       getAllProblems();
     }
-  }, [getAllProblems, problems.length]);
+  }, [authUser, getAllProblems, problems.length]);
+  
 
   const randomChallengeRef = useRef(null);
   useEffect(() => {
-    if (problems.length > 0 && !randomChallengeRef.current) {
+    if (authUser && problems.length > 0 && !randomChallengeRef.current) {
       const random = problems[Math.floor(Math.random() * problems.length)];
       randomChallengeRef.current = {
         title: random.title,
@@ -27,7 +28,8 @@ const Navbar = () => {
       };
       setDailyChallenge(randomChallengeRef.current);
     }
-  }, [problems]);
+  }, [authUser, problems]);
+  
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
