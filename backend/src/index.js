@@ -6,6 +6,7 @@ import executionRoutes from "./routes/executeCode.route.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js"
 import cors from "cors"
+import axios from "axios"
 import dotenv from "dotenv"
 
 import healthcheckRoutes from "./routes/healthcheck.route.js";
@@ -37,22 +38,22 @@ app.use("/api/v1/health-check", healthcheckRoutes);
 app.listen(process.env.PORT,()=>console.log("server started at port for leetlab",process.env.PORT));
 
 
-// const keepAlive = () => {
-//   setInterval(async () => {
-//     try {
-//       const res = await axios.get(
-//         '${import.meta.env.VITE_BACKEND_URL}/api/v1/health-check',
-//         {
-//           timeout: 4000,
-//         }
-//       );
-//       console.log("✅ Ping successful:", res.status);
-//     } catch (error) {
-//       console.warn("⚠️ Ping failed:", error.message);
-//     }
-//   }, 1000 * 60 * 10); // every 10 minutes
-// };
+const keepAlive = () => {
+  setInterval(async () => {
+    try {
+      const res = await axios.get(
+        '${import.meta.env.VITE_BACKEND_URL}/api/v1/health-check',
+        {
+          timeout: 4000,
+        }
+      );
+      console.log("✅ Ping successful:", res.status);
+    } catch (error) {
+      console.warn("⚠️ Ping failed:", error.message);
+    }
+  }, 1000 * 60 * 10); // every 10 minutes
+};
 
-// keepAlive();
+keepAlive();
 
 

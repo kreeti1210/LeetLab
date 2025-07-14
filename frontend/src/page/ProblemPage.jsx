@@ -1,8 +1,10 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import {
   Play,
+  Code,
+  File,
   FileText,
   MessageSquare,
   Lightbulb,
@@ -49,6 +51,8 @@ const ProblemPage = () => {
     submissionCount,
   } = useSubmissionStore();
   const {authUser}=useAuthStore();
+const editorRef = useRef(null);
+
 
   const [code, setCode] = useState("");
 
@@ -267,6 +271,15 @@ const ProblemPage = () => {
       console.log("Error submitting code", error);
     }
   };
+  const handleEditorDidMount = (editor) => {
+    editorRef.current = editor;
+  };
+
+  const formatCode = () => {
+    if (editorRef.current) {
+      editorRef.current.getAction("editor.action.formatDocument").run();
+    }
+  };
 
   if (isProblemLoading || !problem) {
     return (
@@ -455,6 +468,10 @@ const ProblemPage = () => {
                   <Terminal className="w-4 h-4" />
                   Code Editor
                 </button>
+                <button className="tab gap-2">
+                  <Code className="w-4 h-4" />
+                  Format Code
+                </button>
               </div>
 
               <div className="h-[600px] w-full">
@@ -472,6 +489,8 @@ const ProblemPage = () => {
                     scrollBeyondLastLine: false,
                     readOnly: false,
                     automaticLayout: true,
+                    formatOnPaste: true,
+                    formatOnType: true,
                   }}
                 />
               </div>

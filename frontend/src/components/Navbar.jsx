@@ -15,8 +15,7 @@ const Navbar = () => {
     if (authUser && problems.length === 0) {
       getAllProblems();
     }
-  }, [authUser, getAllProblems, problems.length]);
-  
+  }, [authUser, getAllProblems, problems.length]);  
 
   const randomChallengeRef = useRef(null);
   useEffect(() => {
@@ -27,6 +26,7 @@ const Navbar = () => {
         link: `/problem/${random._id}`,
       };
       setDailyChallenge(randomChallengeRef.current);
+      console.log(randomChallengeRef.current);
     }
   }, [authUser, problems]);
   
@@ -37,7 +37,6 @@ const Navbar = () => {
       "data-theme",
       darkMode ? "light" : "dark"
     );
-
   };
 
   return (
