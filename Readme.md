@@ -52,6 +52,40 @@ npm install
 npm run dev
 ```
 
+## LeetLab Looks!
+Here is some awesome clicks of our Leetlab application!
+
+### Login Page
+<img width="1899" height="1004" alt="image" src="https://github.com/user-attachments/assets/0eae05a6-2b6d-43c0-b1ee-c6c42cca9dc9" />
+
+
+### Home Page
+
+- Dark Mode
+<img width="1911" height="1014" alt="image" src="https://github.com/user-attachments/assets/406c8a03-8af7-4138-822a-03e6b42859ae" />
+
+
+
+- Light Mode
+
+<img width="1901" height="1012" alt="image" src="https://github.com/user-attachments/assets/e0d6cba3-fade-43b9-a0c4-ad1d88123901" />
+
+
+
+### Profile Page
+
+<img width="1906" height="1003" alt="image" src="https://github.com/user-attachments/assets/68008418-0fe9-4560-835f-f679c6751037" />
+
+### Problem Page
+
+<img width="1884" height="1007" alt="image" src="https://github.com/user-attachments/assets/f3390fc6-7540-44d7-94c1-8559f8c37ee7" />
+
+
+
+
+
+### Want to visit 
+- Click:  https://leet-lab-dusky.vercel.app/
 
 ---
 ## 🙏 Acknowledgements
