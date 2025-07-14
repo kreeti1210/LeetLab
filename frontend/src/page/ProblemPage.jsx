@@ -463,12 +463,12 @@ const editorRef = useRef(null);
 
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body p-0">
-              <div className="tabs tabs-bordered">
+              <div className="tabs tabs-bordered justify-between">
                 <button className="tab tab-active gap-2">
                   <Terminal className="w-4 h-4" />
                   Code Editor
                 </button>
-                <button className="tab gap-2">
+                <button className="tab border-white gap-2">
                   <Code className="w-4 h-4" />
                   Format Code
                 </button>
@@ -480,6 +480,7 @@ const editorRef = useRef(null);
                   language={selectedLanguage.toLowerCase()}
                   theme="vs-dark"
                   value={code}
+                  onMount={handleEditorDidMount}
                   onChange={(value) => setCode(value || "")}
                   options={{
                     minimap: { enabled: false },
