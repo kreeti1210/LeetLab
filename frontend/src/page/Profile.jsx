@@ -61,7 +61,7 @@ const Profile = () => {
                       src={
                         authUser?.image ||
                         "https://https://api.multiavatar.com/" +
-                          authUser.name +
+                          authUser?.name +
                           ".svg"
                       }
                       alt="User Avatar"
@@ -72,7 +72,7 @@ const Profile = () => {
                       src={
                         authUser?.image ||
                         "https://https://api.multiavatar.com/" +
-                          authUser.name +
+                          authUser?.name +
                           ".svg"
                       }
                       alt="User Avatar"

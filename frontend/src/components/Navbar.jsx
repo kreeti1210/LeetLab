@@ -94,7 +94,7 @@ const Navbar = () => {
                     src={
                       authUser?.image ||
                       "https://https://api.multiavatar.com/" +
-                        authUser.name +
+                        authUser?.name +
                         ".svg"
                     }
                     alt="User Avatar"
