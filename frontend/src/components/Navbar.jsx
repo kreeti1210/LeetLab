@@ -93,7 +93,7 @@ const Navbar = () => {
                   <img
                     src={
                       authUser?.image ||
-                      "https://https://api.multiavatar.com/" +
+                      "https://api.multiavatar.com/" +
                         authUser?.name +
                         ".svg"
                     }
