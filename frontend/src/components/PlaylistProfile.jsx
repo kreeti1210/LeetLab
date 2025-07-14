@@ -25,7 +25,7 @@ const PlaylistProfile = () => {
    
   useEffect(() => {
     getAllPlayLists();
-  }, [authUser,getAllPlayLists, playlists]);
+  }, [authUser,getAllPlayLists]);
 
 
   const togglePlayList = (id) => {

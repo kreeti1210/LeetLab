@@ -21,9 +21,10 @@ const Navbar = () => {
   useEffect(() => {
     if (authUser && problems.length > 0 && !randomChallengeRef.current) {
       const random = problems[Math.floor(Math.random() * problems.length)];
+      console.log(random);
       randomChallengeRef.current = {
         title: random.title,
-        link: `/problem/${random._id}`,
+        link: `/problem/${random.id}`,
       };
       setDailyChallenge(randomChallengeRef.current);
       console.log(randomChallengeRef.current);
