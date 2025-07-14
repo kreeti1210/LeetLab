@@ -60,7 +60,9 @@ const Profile = () => {
                     <img
                       src={
                         authUser?.image ||
-                        "https://avatar.iran.liara.run/public/boy"
+                        "https://https://api.multiavatar.com/" +
+                          authUser.name +
+                          ".svg"
                       }
                       alt="User Avatar"
                       className="object-cover"
@@ -69,7 +71,9 @@ const Profile = () => {
                     <img
                       src={
                         authUser?.image ||
-                        "https://avatar.iran.liara.run/public/boy"
+                        "https://https://api.multiavatar.com/" +
+                          authUser.name +
+                          ".svg"
                       }
                       alt="User Avatar"
                       className="object-cover"
@@ -206,13 +210,14 @@ const Profile = () => {
               <div className="stat-title">Accepted</div>
               <div className="stat-value text-success">
                 {submissions?.filter((s) => s.status === "Accepted").length}
-              </div>            
+              </div>
             </div>
             <div className="stat bg-base-100 shadow rounded">
               <div className="stat-title">Failed</div>
               <div className="stat-value text-error">
-                {submissions?.length - submissions?.filter((s) => s.status === "Accepted").length}
-              </div>            
+                {submissions?.length -
+                  submissions?.filter((s) => s.status === "Accepted").length}
+              </div>
             </div>
           </div>
 

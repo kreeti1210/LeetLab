@@ -93,7 +93,9 @@ const Navbar = () => {
                   <img
                     src={
                       authUser?.image ||
-                      "https://avatar.iran.liara.run/public/boy"
+                      "https://https://api.multiavatar.com/" +
+                        authUser.name +
+                        ".svg"
                     }
                     alt="User Avatar"
                     className="object-cover"
@@ -104,7 +106,6 @@ const Navbar = () => {
                 tabIndex={0}
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 space-y-3"
               >
-            
                 <li>
                   <p className="text-base font-semibold">{authUser?.name}</p>
                   <hr className="border-gray-200/10" />
