@@ -35,7 +35,8 @@ app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/health-check", healthcheckRoutes);
-app.listen(process.env.PORT,()=>console.log("server started at port for leetlab",process.env.PORT));
+app.listen(process.env.PORT,()=>
+  console.log("server started at port for leetlab",process.env.PORT));
 
 
 const keepAlive = () => {

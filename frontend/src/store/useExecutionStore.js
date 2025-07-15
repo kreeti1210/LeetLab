@@ -30,7 +30,6 @@ export const useExecutionStore = create((set) => ({
         problemId,
       });
       set({ detailedResults: res.data.detailedResults });
-      console.log(res.data);
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error executing code", error);
@@ -58,7 +57,6 @@ export const useExecutionStore = create((set) => ({
       },{
         withCredentials: true,
       });
-
       set({ submission: res.data.submission });
       toast.success(res.data.message);
     } catch (error) {

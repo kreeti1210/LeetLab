@@ -21,13 +21,13 @@ const Navbar = () => {
   useEffect(() => {
     if (authUser && problems.length > 0 && !randomChallengeRef.current) {
       const random = problems[Math.floor(Math.random() * problems.length)];
-      console.log(random);
+     
       randomChallengeRef.current = {
         title: random.title,
         link: `/problem/${random.id}`,
       };
       setDailyChallenge(randomChallengeRef.current);
-      console.log(randomChallengeRef.current);
+      
     }
   }, [authUser, problems]);
   
@@ -90,16 +90,20 @@ const Navbar = () => {
                 className="btn btn-ghost btn-circle avatar flex flex-row "
               >
                 <div className="w-10 rounded-full ">
-                  <img
-                    src={
-                      authUser?.image ||
-                      "https://api.multiavatar.com/" +
-                        authUser?.name +
-                        ".svg"
-                    }
-                    alt="User Avatar"
-                    className="object-cover"
-                  />
+                  {authUser.image ? (
+                    <img
+                      src={
+                        authUser?.image ||
+                        "https://avatar.iran.liara.run/public/boy"
+                      }
+                      alt="avatar"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl p-2 text-center">
+                      {authUser.name ? authUser.name.charAt(0) : "U"}
+                    </span>
+                  )}
                 </div>
               </label>
               <ul

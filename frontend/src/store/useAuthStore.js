@@ -17,10 +17,9 @@ export const useAuthStore = create((set) => ({
     set({ isCheckingAuth: true });
     try {
       const res = await axiosInstance.get("/auth/check", { withCredentials: true });
-
       set({ authUser: res.data.user });
     } catch (error) {
-      console.log("❌ Error checking auth:", error);
+      console.log("Error checking auth:", error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
@@ -51,9 +50,7 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post("/auth/login", data, {
         withCredentials: true,
       });
-      set({ authUser: res.data.user });
-     
-      
+      set({ authUser: res.data.user });      
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error logging in", error);
@@ -69,7 +66,6 @@ export const useAuthStore = create((set) => ({
         withCredentials: true,
       });
       set({ authUser: null });
-
       toast.success("Logout successful");
     } catch (error) {
       console.log("Error logging out", error);
@@ -82,7 +78,7 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post("/auth/forgot-password", data,{
         withCredentials: true,
       });
-      console.log(res.data);
+      
       toast.success(res.data.message);
       set({ resetSuccessfully: true });
     } catch (error) {
@@ -98,7 +94,7 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post("/auth/change-role",data,{
         withCredentials: true,
       });
-      console.log(res.data);
+      
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error switching roles", error);

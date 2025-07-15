@@ -22,8 +22,7 @@ const ProblemTable = ({ problems }) => {
   const { createPlayList } = usePlayListStore();
   const { deleteProblem } = useProblemStore();
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
-  const [isAddToPlayListModelOpen, setIsAddToPlayListModelOpen] =
-    useState(false);
+  const [isAddToPlayListModelOpen, setIsAddToPlayListModelOpen] =useState(false);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
@@ -82,9 +81,7 @@ const ProblemTable = ({ problems }) => {
       (currentPage - 1) * itemsPerPage, // 1 * 5 = 5 ( starting index = 0)
       currentPage * itemsPerPage // 1 * 5  = (0 , 10)
     );
-  }, [filteredProblems, currentPage]);
-
- 
+  }, [filteredProblems, currentPage]); 
 
   const handleDelete = (id) => {
     setDeletedProblemId(id);
@@ -110,7 +107,7 @@ const ProblemTable = ({ problems }) => {
   };
   const handleSolveDemo = () => {
     setIsDemo(true);
-    navigate("/problem/30f820d7-883b-4d9e-8784-83a309d5ec50", {
+    navigate("/problem/03017f17-0349-4161-b499-a312c35aeb20", {
       state: { isDemo: true },
     });
   };

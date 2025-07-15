@@ -54,7 +54,6 @@ export const usePlayListStore = create((set, get) => ({
       const response = await axiosInstance.get(`/playlist/${playlistId}`, {
         withCredentials: true,
       });
-      console.log(response.data);
       set({ currentPlaylist: response.data.allList });
     } catch (error) {
       console.error("Error fetching playlist details:", error);
@@ -74,7 +73,6 @@ export const usePlayListStore = create((set, get) => ({
          }
        );
       toast.success("Problem added to playlist");
-      // Refresh the playlist details
       if (get().currentPlaylist?.id === playlistId) {
         await get().getPlaylistDetails(playlistId);
       }

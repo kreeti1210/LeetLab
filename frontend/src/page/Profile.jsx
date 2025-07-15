@@ -60,24 +60,15 @@ const Profile = () => {
                     <img
                       src={
                         authUser?.image ||
-                        "https://api.multiavatar.com/" +
-                          authUser?.name +
-                          ".svg"
+                        "https://avatar.iran.liara.run/public/boy"
                       }
-                      alt="User Avatar"
+                      alt="avatar"
                       className="object-cover"
                     />
                   ) : (
-                    <img
-                      src={
-                        authUser?.image ||
-                        "https://api.multiavatar.com/" +
-                          authUser?.name +
-                          ".svg"
-                      }
-                      alt="User Avatar"
-                      className="object-cover"
-                    />
+                    <span className="text-2xl p-2 text-center">
+                      {authUser.name ? authUser.name.charAt(0) : "U"}
+                    </span>
                   )}
                 </div>
               </div>
