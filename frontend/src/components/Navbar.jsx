@@ -90,7 +90,7 @@ const Navbar = () => {
                 className="btn btn-ghost btn-circle avatar flex flex-row "
               >
                 <div className="w-10 rounded-full ">
-                  {authUser.image ? (
+                  {authUser?.image ? (
                     <img
                       src={
                         authUser?.image ||

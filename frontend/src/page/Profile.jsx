@@ -56,7 +56,7 @@ const Profile = () => {
               {/* Avatar */}
               <div className="avatar placeholder">
                 <div className="bg-neutral text-neutral-content rounded-full w-24 h-24 ring ring-primary ring-offset-base-100 ring-offset-2">
-                  {authUser.image ? (
+                  {authUser?.image ? (
                     <img
                       src={
                         authUser?.image ||
