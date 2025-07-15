@@ -90,20 +90,14 @@ const Navbar = () => {
                 className="btn btn-ghost btn-circle avatar flex flex-row "
               >
                 <div className="w-10 rounded-full ">
-                  {authUser?.image ? (
-                    <img
-                      src={
-                        authUser?.image ||
-                        "https://avatar.iran.liara.run/public/boy"
-                      }
-                      alt="avatar"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <span className="text-2xl p-2 text-center">
-                      {authUser.name ? authUser.name.charAt(0) : "U"}
-                    </span>
-                  )}
+                  <img
+                    src={
+                      authUser?.image ||
+                      "https://avatar.iran.liara.run/public/boy"
+                    }
+                    alt="User Avatar"
+                    className="object-cover"
+                  />
                 </div>
               </label>
               <ul
