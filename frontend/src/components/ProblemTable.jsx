@@ -1,20 +1,19 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 import { usePlayListStore } from "../store/usePlayListStore";
 import {
   Bookmark,
   PencilIcon,
-  Trash,
+RotateCcw,
   TrashIcon,
   Plus,
   Info,
-  Edit,
+
 } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
 import EditProblemModal from "./EditProblemModal";
 import AddToPlayListModel from "../components/AddToPlayListModel";
-import { set } from "react-hook-form";
 import { useProblemStore } from "../store/useProblemStore";
 
 const ProblemTable = ({ problems }) => {
@@ -29,13 +28,14 @@ const ProblemTable = ({ problems }) => {
   const [selectedCompany, setSelectedCompany] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
-  const [isDemo, setIsDemo] = useState(false);
-  const [showDeletedModel, setShowDeletedModel] = useState(false);
+    const [showDeletedModel, setShowDeletedModel] = useState(false);
   const [deletedProblemId, setDeletedProblemId] = useState(null);
   const [editedProblemId, setEditedProblemId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const difficulties = ["EASY", "MEDIUM", "HARD"];
+
+ 
 
 
   const allTags = useMemo(() => {
@@ -105,29 +105,40 @@ const ProblemTable = ({ problems }) => {
   const handleCreatePlayList = async (data) => {
     await createPlayList(data);
   };
-  const handleSolveDemo = () => {
-    setIsDemo(true);
-    navigate("/problem/03017f17-0349-4161-b499-a312c35aeb20", {
-      state: { isDemo: true },
-    });
+
+useEffect(() => {
+  const handleRefresh = () => {
+    setSearch("");
+    setDifficulty("ALL");
+    setSelectedTag("ALL");
+    setSelectedCompany("ALL");
+    setCurrentPage(1);
+    setRefreshKey((prev) => prev + 1);
   };
 
+  window.addEventListener("refreshProblems", handleRefresh);
+  return () => window.removeEventListener("refreshProblems", handleRefresh);
+}, []);
+
+
   return (
-    <div className="w-full max-w-6xl mx-auto  bg-primary/20 z-20 p-6 rounded-sm mt-10">
-      <div className="flex justify-between items-center mb-6 gap-4">
+    <div className="w-fit  max-w-6xl mx-auto  bg-primary/20 z-20 py-6 pl-6 ">
+      <div className="flex justify-between items-center mb-6 gap-2">
         <div className="flex flex-row gap-3 mr-15   items-center justify-center">
           <h2
             className="text-2xl font-bold cursor-pointer"
-            onClick={() => window.location.reload()}
+            onClick={() => window.dispatchEvent(new Event("refreshProblems"))}
           >
             Problems
           </h2>
         </div>
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row gap-4">
           <div className="flex flex-row justify-between gap-3">
             <button
               className="btn btn-primary/20 shadow-md hover:bg-primary/20 "
-              onClick={() => handleSolveDemo()}
+              onClick={() => {
+                navigate("/problem/03017f17-0349-4161-b499-a312c35aeb20");
+              }}
             >
               Solve Demo
               <div className="relative group">
@@ -203,8 +214,18 @@ const ProblemTable = ({ problems }) => {
               <th>Solved</th>
               <th>Title</th>
               <th>Tags</th>
+
               <th>Difficulty</th>
-              <th>Actions</th>
+              <th>Company Tags</th>
+              <th className="flex flex-row  align-middle justify-center items-center gap-4">
+                Actions
+                <RotateCcw
+                  className="w-4 h-6 cursor-pointer hover:text-white "
+                  onClick={() =>
+                    window.dispatchEvent(new Event("refreshProblems"))
+                  }
+                />
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -233,17 +254,18 @@ const ProblemTable = ({ problems }) => {
                       </Link>
                     </td>
                     <td>
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-y-1 my-1 ">
                         {(problem.tags || []).map((tag, idx) => (
                           <span
                             key={idx}
-                            className="badge badge-outline badge-warning text-xs font-bold"
+                            className="badge badge-outline badge-warning text-xs mx-1  font-semibold"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
                     </td>
+
                     <td>
                       <span
                         className={`badge font-semibold text-xs text-white ${
@@ -258,7 +280,28 @@ const ProblemTable = ({ problems }) => {
                       </span>
                     </td>
                     <td>
-                      <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                      <span className=" flex flex-wrap gap-y-1   font-semibold  ">
+                        {problem.companyTags?.length > 0 ? (
+                          <span>
+                            {problem.companyTags.slice(0, 2).map((tag, idx) => (
+                              <span
+                                key={idx}
+                                className="badge text-xs  text-gray-400 outline px-1.5 mx-1"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </span>
+                        ) : (
+                          <p className="badge  text-xs text-gray-400 outline  ">
+                            Unlisted
+                          </p>
+                        )}
+                      </span>
+                    </td>
+
+                    <td>
+                      <div className="flex flex-row md:flex-row gap-2 mr-3 items-start md:items-center">
                         {authUser?.role === "ADMIN" && (
                           <div className="flex gap-2">
                             <button
@@ -306,7 +349,7 @@ const ProblemTable = ({ problems }) => {
                           </div>
                         )}
                         <button
-                          className="btn btn-sm btn-outline flex gap-2 items-center"
+                          className="btn btn-sm btn-outline flex gap-2 items-center p-2 mr-4"
                           onClick={() => handleAddToPlaylist(problem.id)}
                         >
                           <Bookmark className="w-4 h-4" />
@@ -330,7 +373,7 @@ const ProblemTable = ({ problems }) => {
         </table>
       </div>
 
-      {/*  */}
+   
       <div className="flex justify-center mt-6 items-center  gap-2">
         <div className=" outline shadow-sm  btn-group rounded-sm">
           <button
@@ -353,7 +396,6 @@ const ProblemTable = ({ problems }) => {
         </div>
       </div>
 
-      {/* Creating Model */}
 
       <CreatePlayListModel
         isOpen={isCreateModelOpen} //value of clicked button

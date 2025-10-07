@@ -11,13 +11,14 @@ export const useProblemStore = create((set) => ({
   totalSolvedProblems: null,
   isDeletingProblem: null,
   isUpdatingProblem: null,
+  
 
   getAllProblems: async () => {
     try {
       set({ isProblemsLoading: true });
-           const res = await axiosInstance.get("/problems/get-all-problems", {
-             withCredentials: true,
-           });
+      const res = await axiosInstance.get("/problems/get-all-problems", {
+        withCredentials: true,
+      });
 
       set({ problems: res.data.problems });
     } catch (error) {
@@ -27,14 +28,15 @@ export const useProblemStore = create((set) => ({
       set({ isProblemsLoading: false });
     }
   },
+ 
+
   getProblemById: async (id) => {
     try {
       set({ isProblemLoading: true });
       const res = await axiosInstance.get(`/problems/get-problem/${id}`, {
         withCredentials: true,
-      });     
+      });
       set({ problem: res.data.problem });
-   
     } catch (error) {
       console.log("Error getting all problems", error);
       toast.error("Error in getting problems");
@@ -86,37 +88,33 @@ export const useProblemStore = create((set) => ({
   deleteProblem: async (id) => {
     try {
       set({ isDeletingProblem: true });
-     const res = await axiosInstance.delete(`/problems/delete-problem/${id}`, {
-       withCredentials: true,
-     });
+      const res = await axiosInstance.delete(`/problems/delete-problem/${id}`, {
+        withCredentials: true,
+      });
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error deleting problem", error);
       toast.error("Error deleting problem");
-      
-    }
-    finally{
+    } finally {
       set({ isDeletingProblem: false });
     }
   },
   updateProblem: async (id, data) => {
     try {
       set({ isUpdatingProblem: true });
-     const res = await axiosInstance.put(
-       `/problems/update-problem/${id}`,
-       data,
-       {
-         withCredentials: true,
-       }
-     );
+      const res = await axiosInstance.put(
+        `/problems/update-problem/${id}`,
+        data,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success(res.data.message);
     } catch (error) {
       console.log("Error updating problem", error);
       toast.error("Error updating problem");
-      
-    }
-    finally{
+    } finally {
       set({ isUpdatingProblem: false });
     }
-  }
+  },
 }));

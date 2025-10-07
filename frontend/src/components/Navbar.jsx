@@ -41,15 +41,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-30 bg-primary/20 w-full">
-      <div className="flex w-full justify-between items-center px-6 py-3 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10 rounded-xl">
+    <nav className="sticky top-0 z-50 flex items-center justify-between bg-primary/10 w-full">
+      <div className="flex w-full justify-between items-center px-6 py-4 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10">
         {/* Logo Section */}
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-2">
           <img
             src="/leetlab.svg"
-            className="h-14 w-14 bg-primary/20 rounded-full p-2"
+            className="h-12 w-12 bg-primary/10 rounded-full px-2 "
           />
-          <span className="text-lg bg-primary/20 shadow-md rounded-2xl px-2 py-1 text-white md:text-2xl font-bold tracking-tight hidden md:block">
+          <span className="text-lg bg-primary/20 shadow-md rounded-xl px-4 py-1 text-white md:text-2xl font-bold tracking-tight hidden md:block">
             LeetLab
           </span>
         </Link>
@@ -89,7 +89,7 @@ const Navbar = () => {
                 tabIndex={0}
                 className="btn btn-ghost btn-circle avatar flex flex-row "
               >
-                <div className="w-10 rounded-full ">
+                <div className="w-10 h-10 rounded-full ">
                   <img
                     src={
                       authUser?.image ||
@@ -97,6 +97,9 @@ const Navbar = () => {
                     }
                     alt="User Avatar"
                     className="object-cover"
+                    width={48}
+                    height={48}
+                    loading="lazy"
                   />
                 </div>
               </label>

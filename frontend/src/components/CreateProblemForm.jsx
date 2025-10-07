@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -568,7 +568,7 @@ const CreateProblemForm = () => {
     try {
       setIsLoading(true);
       const res = await axiosInstance.post("/problems/create-problem", value);
-      console.log(res.data);
+
       toast.success(res.data.message || "Problem Created successfully⚡");
       navigation("/");
     } catch (error) {
