@@ -122,7 +122,7 @@ useEffect(() => {
 
 
   return (
-    <div className="w-fit  max-w-6xl mx-auto  bg-primary/20 z-20 py-6 pl-6 ">
+    <div className=" w-full max-w-6xl mx-auto  bg-primary/20 z-20 py-6 pl-6 ">
       <div className="flex justify-between items-center mb-6 gap-2">
         <div className="flex flex-row gap-3 mr-15   items-center justify-center">
           <h2
@@ -159,6 +159,7 @@ useEffect(() => {
             />
             <select
               className="select select-bordered bg-base-200 w-full md:w-1/5"
+              label={"Difficulty"}
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
             >
@@ -170,6 +171,7 @@ useEffect(() => {
               ))}
             </select>
             <select
+            label={"Company"}
               className="select select-bordered bg-base-200 w-full md:w-1/5"
               value={selectedCompany}
               onChange={(e) => setSelectedCompany(e.target.value)}
@@ -182,6 +184,7 @@ useEffect(() => {
               ))}
             </select>
             <select
+            label={"Tag"}
               className="select select-bordered bg-base-200 w-full md:w-1/5"
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
@@ -207,7 +210,8 @@ useEffect(() => {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl shadow-md">
+      <div className="overflow-x-auto rounded-xl shadow-md"
+      >
         <table className="table table-zebra table-lg bg-base-200 text-base-content">
           <thead className="bg-base-200">
             <tr>

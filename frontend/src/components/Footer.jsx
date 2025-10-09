@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Github, Twitter, Linkedin } from "lucide-react";
-import About from "./About";
+
 
 const Footer = () => {
   return (
@@ -12,6 +12,7 @@ const Footer = () => {
           <img
             src="/leetlab.svg"
             className="h-14 w-14 bg-primary/20 border-none px-2 py-2 rounded-full"
+            alt="LeetLab Logo"
           />
           <span className="text-lg md:text-2xl font-bold tracking-tight text-white">
             LeetLab
@@ -35,30 +36,28 @@ const Footer = () => {
         </div>
 
         {/* Social Media Links */}
-        <div className="flex gap-5 mt-4 md:mt-0 text-primary">
+        <div className="flex gap-5  hover:text-teal-400mt-4 md:mt-0 text-primary">
           <a
             href="https://www.github.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-teal-400"
+            className=""
           >
-            <Github className="w-6 h-6" />
+            <Github className="w-6 h-6 hover:text-teal-400" />
           </a>
           <a
             href="https://twitter.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-teal-400"
           >
-            <Twitter className="w-6 h-6" />
+            <Twitter className="w-6 h-6 hover:text-teal-400" />
           </a>
           <a
             href="https://linkedin.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-teal-400"
           >
-            <Linkedin className="w-6 h-6" />
+            <Linkedin className="w-6 h-6 hover:text-teal-400" />
           </a>
         </div>
       </div>

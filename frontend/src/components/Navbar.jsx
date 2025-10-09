@@ -11,11 +11,14 @@ const Navbar = () => {
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
 
-  useEffect(() => {
-    if (authUser && problems.length === 0) {
-      getAllProblems();
-    }
-  }, [authUser, getAllProblems, problems.length]);  
+useEffect(() => {
+  if (!authUser) return;
+  // Defer to idle time to avoid blocking render
+  window.requestIdleCallback(() => {
+    getAllProblems();
+  });
+}, [authUser, getAllProblems]);
+
 
   const randomChallengeRef = useRef(null);
   useEffect(() => {
@@ -41,35 +44,48 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between bg-primary/10 w-full">
-      <div className="flex w-full justify-between items-center px-6 py-4 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10">
+    <nav className="sticky  w-full shrink-0 top-0 z-50 flex flex-wrap gap-15 items-center justify-between bg-primary/10 ">
+      <div className="flex flex-row  shrink-0 w-full justify-between  items-center px-6 py-4 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10">
         {/* Logo Section */}
-        <Link to="/" className="flex items-center gap-2">
-          <img
-            src="/leetlab.svg"
-            className="h-12 w-12 bg-primary/10 rounded-full px-2 "
-          />
-          <span className="text-lg bg-primary/20 shadow-md rounded-xl px-4 py-1 text-white md:text-2xl font-bold tracking-tight hidden md:block">
-            LeetLab
-          </span>
-        </Link>
+        <div className="flex shrink-0 items-center flex-1">
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src="/leetlab.svg"
+              loading="lazy"
+              decoding="async"
+              className="h-12 w-12 bg-primary/10 rounded-full px-2 "
+              alt="LeetLab Logo"
+            />
+            <span className="text-lg bg-primary/20 shadow-md rounded-xl px-4 py-1 text-white md:text-2xl font-bold tracking-tight hidden md:block">
+              LeetLab
+            </span>
+          </Link>
+        </div>
 
         {/* Daily Challenge */}
-        {dailyChallenge && (
-          <div className="hidden md:flex items-center gap-2 bg-primary/30 text-white px-4 py-2 rounded-lg shadow-md">
+        <div className="  md:flex items-center shrink-0 text-center align-center justify-center">
+          <div className="hidden md:flex flex-1 items-center gap-2 bg-primary/30 text-white px-4 py-2 rounded-lg shadow-md ">
             <Trophy className="w-5 h-5 text-yellow-400" />
             <p className="text-sm font-semibold">Daily Challenge:</p>
-            <Link
-              to={dailyChallenge.link}
-              className="text-white font-bold hover:underline"
-            >
-              {dailyChallenge.title}
-            </Link>
+            {dailyChallenge ? (
+              <>
+                <Link
+                  to={dailyChallenge.link}
+                  className="text-white font-bold hover:underline"
+                >
+                  {dailyChallenge.title}
+                </Link>
+              </>
+            ) : (
+              <span className="text-sm text-semibold px-4">
+                Loading challenge
+              </span>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Actions & User Dropdown */}
-        <div className="flex items-center gap-6">
+        <div className="flex-1 flex items-center justify-end gap-6">
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
