@@ -93,6 +93,7 @@ export const createProblem = async (req, res) => {
 };
 
 export const getAllProblems = async (req, res) => {
+const start = Date.now();
   try {
     const problems = await db.problem.findMany({
       include: {
@@ -103,6 +104,7 @@ export const getAllProblems = async (req, res) => {
         },
       },
     });
+   console.log(`Request time: ${Date.now() - start} ms`);
     if (!problems) {
       return res.status(404).json({
         message: "No problems found",
@@ -115,6 +117,7 @@ export const getAllProblems = async (req, res) => {
       problems,
     });
   } catch (error) {
+console.log(`Request failed after ${Date.now() - start} ms`);
     return res.status(500).json({
       message: "Error fetching problems",
       success: false,
