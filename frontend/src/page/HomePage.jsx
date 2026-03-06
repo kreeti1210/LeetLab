@@ -1,4 +1,4 @@
-import { useEffect, useState,useMemo,useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useProblemStore } from "../store/useProblemStore";
 import { Rocket, Loader } from "lucide-react";
 
@@ -9,30 +9,30 @@ const ProblemTable = lazy(() => import("../components/ProblemTable.jsx"));
 
 
 const HomePage = () => {
-const {
-  getAllProblems,
-  problems,
-  isProblemsLoading,
-  getSolvedProblemByUser,
-  totalSolvedProblems,
-} = useProblemStore();
+  const {
+    getAllProblems,
+    problems,
+    isProblemsLoading,
+    getSolvedProblemByUser,
+    totalSolvedProblems,
+  } = useProblemStore();
   const navigate = useNavigate();
   const { authUser } = useAuthStore();
- 
-  const [selectedCompany, setSelectedCompany] = useState("");
-const filteredProblems = useMemo(() => {
-  if (!selectedCompany) return problems;
-  return problems.filter((p) => p.companyTags?.includes(selectedCompany));
-}, [selectedCompany, problems]);
 
-const handleCompanySelect = useCallback((company) => {
-  setSelectedCompany(company);
-}, []);
+  const [selectedCompany, setSelectedCompany] = useState("");
+  const filteredProblems = useMemo(() => {
+    if (!selectedCompany) return problems;
+    return problems.filter((p) => p.companyTags?.includes(selectedCompany));
+  }, [selectedCompany, problems]);
+
+  const handleCompanySelect = useCallback((company) => {
+    setSelectedCompany(company);
+  }, []);
 
   // useEffect(() => {
   //   getSolvedProblemByUser();
   // }, [getSolvedProblemByUser]);
-  
+
   // useEffect(() => {
   //   if(problems.length===0)
   //     getAllProblems();
@@ -46,14 +46,14 @@ const handleCompanySelect = useCallback((company) => {
   }, []);
 
 
-const handleRecommendedproblems = useCallback(
-  (problemId) => navigate(`/problem/${problemId}`),
-  [navigate]
-);
+  const handleRecommendedproblems = useCallback(
+    (problemId) => navigate(`/problem/${problemId}`),
+    [navigate]
+  );
 
 
    
-    
+
   return (
     <div className="min-h-screen w-full flex flex-row gap-6 ">
       {/* Main Content Section */}
@@ -75,7 +75,7 @@ const handleRecommendedproblems = useCallback(
           <div className="flex-1  w-full  min-w-6xl">
             {isProblemsLoading ? (
               <div className="flex items-center  justify-center text-gray-300 text-center ">
-                <p className="text-gray-300 mt-30">Loading problems  </p>
+                <p className="text-gray-300 mt-30">Loading problems </p>
                 <Loader className="text-gray-300 mt-30 max-h-[200px] items-center size-6 animate-spin" />
               </div>
             ) : problems.length > 0 ? (
@@ -83,7 +83,9 @@ const handleRecommendedproblems = useCallback(
                 <Suspense
                   fallback={
                     <>
-                      <p className="text-gray-300 mt-30 gap-3">Loading problems  </p>
+                      <p className="text-gray-300 mt-30 gap-3">
+                        Loading problems{" "}
+                      </p>
                       <Loader className="text-gray-300 mt-30 max-h-[200px] items-center size-6 animate-spin" />
                     </>
                   }
@@ -109,7 +111,7 @@ const handleRecommendedproblems = useCallback(
                 className="radial-progress w-[88px] h-[88px] shadow-lg text-xl font-bold text-primary bg-white p-4 rounded-full border-4 border-gray-200"
                 style={{
                   "--value": Math.round(
-                    (totalSolvedProblems / problems.length) * 100
+                    (totalSolvedProblems / problems.length) * 100,
                   ),
                   "--thickness": "6px",
                 }}
