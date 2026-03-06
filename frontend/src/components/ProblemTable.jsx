@@ -106,19 +106,20 @@ const ProblemTable = ({ problems }) => {
     await createPlayList(data);
   };
 
-   const handleRefresh = () => {
-     setSearch("");
-     setDifficulty("ALL");
-     setSelectedTag("ALL");
-     setSelectedCompany("ALL");
-     setCurrentPage(1);
-     setRefreshKey((prev) => prev + 1);
-   };
-
+  const [refreshKey, setRefreshKey] = useState(0);
 useEffect(() => {
+  const handleRefresh = () => {
+    setSearch("");
+    setDifficulty("ALL");
+    setSelectedTag("ALL");
+    setSelectedCompany("ALL");
+    setCurrentPage(1);
+    setRefreshKey((prev) => prev + 1);
+  };
+
   window.addEventListener("refreshProblems", handleRefresh);
   return () => window.removeEventListener("refreshProblems", handleRefresh);
-}, [handleRefresh]);
+}, []);
 
 
   return (

@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import executionRoutes from "./routes/executeCode.route.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
+import dailyChallengeRoutes from "./routes/dailyChallenge.route.js";
 import cors from "cors";
 import axios from "axios";
 import { connectRedis } from "./libs/redis.js";
@@ -34,6 +35,7 @@ app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/health-check", healthcheckRoutes);
+app.use("/api/v1", dailyChallengeRoutes);
 app.listen(process.env.PORT, () =>
   console.log("server started at port for leetlab", process.env.PORT),
 );

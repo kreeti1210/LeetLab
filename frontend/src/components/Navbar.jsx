@@ -1,46 +1,69 @@
-import React, { useState, useEffect,useRef } from "react";
-import { User, Code, LogOut, Folder, Search, Sun, Moon,Trophy,Flame } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  User,
+  Code,
+  LogOut,
+  Folder,
+  Search,
+  Sun,
+  Moon,
+  Trophy,
+  Flame,
+} from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import { useProblemStore } from "../store/useProblemStore";
-
+import { axiosInstance } from "../lib/axios.js";
 const Navbar = () => {
   const { authUser } = useAuthStore();
   const [darkMode, setDarkMode] = useState(true);
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
 
-useEffect(() => {
-  if (!authUser) return;
-  // Defer to idle time to avoid blocking render
-  window.requestIdleCallback(() => {
-    getAllProblems();
-  });
-}, [authUser, getAllProblems]);
-
-
-  const randomChallengeRef = useRef(null);
   useEffect(() => {
-    if (authUser && problems.length > 0 && !randomChallengeRef.current) {
-      const random = problems[Math.floor(Math.random() * problems.length)];
-     
-      randomChallengeRef.current = {
-        title: random.title,
-        link: `/problem/${random.id}`,
-      };
-      setDailyChallenge(randomChallengeRef.current);
-      
+    if (!authUser) return;
+    // Defer to idle time to avoid blocking render
+    window.requestIdleCallback(() => {
+      getAllProblems();
+    });
+  }, [authUser, getAllProblems]);
+
+  useEffect(() => {
+    const fetchDailyChallenge = async () => {
+      try {
+        const res = await axiosInstance.get("/challenge/daily");
+
+        const data = res.data;
+
+        setDailyChallenge({
+          title: data.title,
+          link: `/problem/${data.id}`,
+        });
+      } catch (error) {
+        console.error("Error fetching daily challenge", error);
+      }
+    };
+
+    fetchDailyChallenge();
+  }, []);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      setDarkMode(savedTheme === "dark");
     }
-  }, [authUser, problems]);
-  
+  }, []);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.setAttribute(
-      "data-theme",
-      darkMode ? "light" : "dark"
-    );
+    const newTheme = !darkMode;
+    setDarkMode(newTheme);
+    const theme = newTheme ? "dark" : "light";
+
+    document.documentElement.setAttribute("data-theme", theme);
+
+    localStorage.setItem("theme", theme);
   };
 
   return (

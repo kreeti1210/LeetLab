@@ -58,10 +58,10 @@ const HomePage = () => {
     <div className="min-h-screen w-full flex flex-row gap-6 ">
       {/* Main Content Section */}
       <div className="flex flex-col items-center  w-full">
-        <section className="flex flex-col items-center justify-center w-full min-h-[60px] py-8 px-4 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+        <section className="flex flex-col items-center justify-center w-full min-h-[60px] py-8 px-4 ">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white mb-4">
-              LeetLab welcomes{" "}
+            <h1 className="text-4xl font-bold tracking-tight  mb-4">
+              LeetLab welcomes you,{" "}
               <span className="text-indigo-400">{authUser?.name || "You"}</span>
               !
             </h1>
