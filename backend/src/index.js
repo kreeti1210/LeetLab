@@ -10,7 +10,9 @@ import axios from "axios"
 import dotenv from "dotenv"
 
 import healthcheckRoutes from "./routes/healthcheck.route.js";
-dotenv.config();    
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});   
 const app=express();
 
 
