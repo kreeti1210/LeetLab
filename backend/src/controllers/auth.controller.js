@@ -28,8 +28,8 @@ export const register = async (req, res) => {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     res.status(201).json({
@@ -66,12 +66,12 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
+   res.cookie("token", token, {
+     httpOnly: true,
+     secure: process.env.NODE_ENV === "production",
+     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+     maxAge: 1000 * 60 * 60 * 24 * 7,
+   });
     res.status(201).json({
       success: true,
       message: "User login successfully",
@@ -92,11 +92,11 @@ export const login = async (req, res) => {
 };
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "none",
-    });
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
     res.status(200).json({
       success: true,
       message: "User logged out successfully",

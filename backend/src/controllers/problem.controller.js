@@ -4,6 +4,10 @@ import {
   pollBatchResults,
   getJudge0LanguageId,
 } from "../libs/judge0.lib.js";
+import { redisClient } from "../libs/redis.js";
+import { invalidateProblemCache } from "../libs/cache.utils.js";
+import { getAllProblemsKey } from "../libs/cacheKeys.js";
+
 export const createProblem = async (req, res) => {
   // going to all data from req body - title, desc,etc
   const {
@@ -31,7 +35,7 @@ export const createProblem = async (req, res) => {
       const languageId = getJudge0LanguageId(language);
 
       if (!languageId) {
-        return req.status(403).json({
+        return res.status(403).json({
           error: "Language not allowed",
         });
       }
@@ -77,6 +81,7 @@ export const createProblem = async (req, res) => {
         error: "problem while creating problem in db",
       });
     }
+    await invalidateProblemCache();
 
     return res.status(201).json({
       message: "Problem created successfully",
@@ -93,7 +98,31 @@ export const createProblem = async (req, res) => {
 };
 
 export const getAllProblems = async (req, res) => {
+  const start = Date.now();
   try {
+    const cacheKey = getAllProblemsKey(req.user.id);
+    let cachedProblems = null;
+
+    try {
+      cachedProblems = await redisClient.get(cacheKey);
+    } catch (err) {
+      console.log("Redis read failed:", err.message);
+    }
+
+    if (cachedProblems) {
+      console.log(
+        `Retrieved cached problem storage in ${Date.now() - start} ms`,
+      );
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        problems: JSON.parse(cachedProblems),
+        responseTime: `${Date.now() - start} ms`,
+      });
+    }
+
+    console.log("Redis MISS → fetching from database....");
+
     const problems = await db.problem.findMany({
       include: {
         solvedBy: {
@@ -103,18 +132,27 @@ export const getAllProblems = async (req, res) => {
         },
       },
     });
+
     if (!problems) {
       return res.status(404).json({
         message: "No problems found",
+        source: "database",
         success: false,
       });
     }
+
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(problems));
+
+    console.log(`Request time for getting problems: ${Date.now() - start} ms`);
+
     return res.status(200).json({
       message: "Problems fetched successfully",
+      source: "database",
       success: true,
       problems,
     });
   } catch (error) {
+    console.log(`Request failed after ${Date.now() - start} ms`);
     return res.status(500).json({
       message: "Error fetching problems",
       success: false,
@@ -125,7 +163,6 @@ export const getAllProblems = async (req, res) => {
 export const getProblemById = async (req, res) => {
   const { id } = req.params;
   try {
-
     const problem = await db.problem.findUnique({
       where: {
         id,
@@ -138,7 +175,6 @@ export const getProblemById = async (req, res) => {
       });
     }
 
-
     return res.status(201).json({
       message: "Problem fetched successfully by their id",
       success: true,
@@ -150,10 +186,10 @@ export const getProblemById = async (req, res) => {
       success: false,
     });
   }
- 
 };
 export const updateProblem = async (req, res) => {
   //id nikalo
+
   const { id } = req.params;
 
   const {
@@ -232,14 +268,19 @@ export const updateProblem = async (req, res) => {
       },
     });
 
+    await invalidateProblemCache();
+
     return res.status(200).json({
       message: "Problem updated successfully",
       success: true,
       problem: updatedProblem,
     });
   } catch (error) {
+    console.error("Update problem error:", error);
+
     return res.status(500).json({
       message: "Error updating problem",
+      error: error.message,
     });
   }
 };
@@ -251,6 +292,8 @@ export const deleteProblem = async (req, res) => {
         id,
       },
     });
+    await invalidateProblemCache();
+
     return res.status(200).json({
       message: "Problem deleted successfully",
       success: true,
@@ -318,6 +361,7 @@ export const addtoCompanyTags = async (req, res) => {
           },
         });
       });
+      await invalidateProblemCache();
       return res.status(200).json({
         message: "Added company tags successfully",
         success: true,
