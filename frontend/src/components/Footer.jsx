@@ -20,7 +20,7 @@ const Footer = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex gap-6 text-gray-500 text-sm mt-4 md:mt-0">
+        <div className="flex gap-10  text-white mt-4 md:mt-0">
           <Link to="/about" className="hover:text-teal-400">
             About
           </Link>
@@ -63,7 +63,7 @@ const Footer = () => {
       </div>
 
       {/* Copyright Notice */}
-      <div className="text-center text-gray-400 text-xs mt-4">
+      <div className="text-center text-gray-400 text-xs ml-8 mt-4">
         © {new Date().getFullYear()} LeetLab. All rights reserved.
       </div>
     </footer>

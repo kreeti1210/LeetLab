@@ -176,11 +176,11 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="max-w-5xl w-full mx-auto">
         <div className="bg-base-200 p-4 ">
-          <div className="max-w-4xl  mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-center mt-6  mb-4">
-              <h3 className="text-2xl font-bold text-primary mb-4 pl-2 md:mb-0">
+              <h3 className="text-2xl font-bold text-primary/90 mb-4 pl-4 md:mb-0">
                 Total Submissions
               </h3>
               <Link
@@ -192,7 +192,7 @@ const Profile = () => {
               </Link>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3   mb-3 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3  max-w-4xl mx-auto  mb-6 px-4">
             <div className="stat bg-base-100 shadow rounded">
               <div className="stat-title">Total</div>
               <div className="stat-value">{submissions?.length}</div>

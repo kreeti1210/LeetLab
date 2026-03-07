@@ -4,14 +4,12 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import { useProblemStore } from "../store/useProblemStore";
-import {axiosInstance} from "../lib/axios";
+import { axiosInstance } from "../lib/axios";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
-  const [darkMode, setDarkMode] = useState(true);
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
-
 
   useEffect(() => {
     if (!authUser) return;
@@ -20,34 +18,43 @@ const Navbar = () => {
       getAllProblems();
     });
   }, [authUser, getAllProblems]);
-useEffect(() => {
-  if (!authUser) return;
+  useEffect(() => {
+    if (!authUser) return;
 
-  const fetchDailyChallenge = async () => {
-    try {
-      const res = await axiosInstance.get("/daily-challenge");
+    const fetchDailyChallenge = async () => {
+      try {
+        const res = await axiosInstance.get("/daily-challenge");
 
-      const challenge = res.data;
+        const challenge = res.data;
 
-      setDailyChallenge({
-        title: challenge.title,
-        link: `/problem/${challenge.id}`,
-      });
-    } catch (error) {
-      console.error("Failed to fetch daily challenge:", error);
-    }
-  };
+        setDailyChallenge({
+          title: challenge.title,
+          link: `/problem/${challenge.id}`,
+        });
+      } catch (error) {
+        console.error("Failed to fetch daily challenge:", error);
+      }
+    };
 
-  fetchDailyChallenge();
-}, [authUser]);
-  
+    fetchDailyChallenge();
+  }, [authUser]);
+
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme ? savedTheme === "dark" : true;
+  });
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.setAttribute(
-      "data-theme",
-      darkMode ? "light" : "dark"
-    );
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    const theme = newMode ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   };
 
   return (

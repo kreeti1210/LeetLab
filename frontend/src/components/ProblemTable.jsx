@@ -5,38 +5,36 @@ import { usePlayListStore } from "../store/usePlayListStore";
 import {
   Bookmark,
   PencilIcon,
-RotateCcw,
+  RotateCcw,
+  X,
   TrashIcon,
   Plus,
   Info,
-
 } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
 import EditProblemModal from "./EditProblemModal";
 import AddToPlayListModel from "../components/AddToPlayListModel";
 import { useProblemStore } from "../store/useProblemStore";
 
-const ProblemTable = ({ problems }) => {
+const ProblemTable = ({ problems, sidebarCompany }) => {
   const { authUser } = useAuthStore();
   const { createPlayList } = usePlayListStore();
   const { deleteProblem } = useProblemStore();
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
-  const [isAddToPlayListModelOpen, setIsAddToPlayListModelOpen] =useState(false);
+  const [isAddToPlayListModelOpen, setIsAddToPlayListModelOpen] =
+    useState(false);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
   const [selectedCompany, setSelectedCompany] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
-    const [showDeletedModel, setShowDeletedModel] = useState(false);
+  const [showDeletedModel, setShowDeletedModel] = useState(false);
   const [deletedProblemId, setDeletedProblemId] = useState(null);
   const [editedProblemId, setEditedProblemId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
   const difficulties = ["EASY", "MEDIUM", "HARD"];
-
- 
-
 
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
@@ -49,9 +47,7 @@ const ProblemTable = ({ problems }) => {
     if (!Array.isArray(problems)) return [];
     const companyTagsSet = new Set();
     problems.forEach((p) =>
-      p.companyTags?.forEach((t) =>
-        companyTagsSet.add(t)
-      )
+      p.companyTags?.forEach((t) => companyTagsSet.add(t)),
     );
     return Array.from(companyTagsSet);
   }, [problems]);
@@ -59,18 +55,18 @@ const ProblemTable = ({ problems }) => {
   const filteredProblems = useMemo(() => {
     return (problems || [])
       .filter((problem) =>
-        problem.title.toLowerCase().includes(search.toLowerCase())
+        problem.title.toLowerCase().includes(search.toLowerCase()),
       )
       .filter((problem) =>
-        difficulty === "ALL" ? true : problem.difficulty === difficulty
+        difficulty === "ALL" ? true : problem.difficulty === difficulty,
       )
       .filter((problem) =>
-        selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag)
+        selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag),
       )
       .filter((problem) =>
         selectedCompany === "ALL"
           ? true
-          : problem.companyTags?.includes(selectedCompany)
+          : problem.companyTags?.includes(selectedCompany),
       );
   }, [problems, search, difficulty, selectedTag, selectedCompany]);
 
@@ -79,9 +75,9 @@ const ProblemTable = ({ problems }) => {
   const paginatedProblems = useMemo(() => {
     return filteredProblems.slice(
       (currentPage - 1) * itemsPerPage, // 1 * 5 = 5 ( starting index = 0)
-      currentPage * itemsPerPage // 1 * 5  = (0 , 10)
+      currentPage * itemsPerPage, // 1 * 5  = (0 , 10)
     );
-  }, [filteredProblems, currentPage]); 
+  }, [filteredProblems, currentPage]);
 
   const handleDelete = (id) => {
     setDeletedProblemId(id);
@@ -106,20 +102,26 @@ const ProblemTable = ({ problems }) => {
     await createPlayList(data);
   };
 
-   const handleRefresh = () => {
-     setSearch("");
-     setDifficulty("ALL");
-     setSelectedTag("ALL");
-     setSelectedCompany("ALL");
-     setCurrentPage(1);
-     setRefreshKey((prev) => prev + 1);
-   };
+  const handleRefresh = () => {
+    setSearch("");
+    setDifficulty("ALL");
+    setSelectedTag("ALL");
+    setSelectedCompany("ALL");
+    setCurrentPage(1);
+    setRefreshKey((prev) => prev + 1);
+  };
 
-useEffect(() => {
-  window.addEventListener("refreshProblems", handleRefresh);
-  return () => window.removeEventListener("refreshProblems", handleRefresh);
-}, [handleRefresh]);
+  useEffect(() => {
+    window.addEventListener("refreshProblems", handleRefresh);
+    return () => window.removeEventListener("refreshProblems", handleRefresh);
+  }, [handleRefresh]);
 
+  const isFilterActive =
+    search !== "" ||
+    difficulty !== "ALL" ||
+    selectedTag !== "ALL" ||
+    selectedCompany !== "ALL" ||
+    sidebarCompany !== "";
 
   return (
     <div className=" w-full max-w-6xl mx-auto  bg-primary/20 z-20 py-6 pl-6 ">
@@ -171,7 +173,7 @@ useEffect(() => {
               ))}
             </select>
             <select
-            label={"Company"}
+              label={"Company"}
               className="select select-bordered bg-base-200 w-full md:w-1/5"
               value={selectedCompany}
               onChange={(e) => setSelectedCompany(e.target.value)}
@@ -184,7 +186,7 @@ useEffect(() => {
               ))}
             </select>
             <select
-            label={"Tag"}
+              label={"Tag"}
               className="select select-bordered bg-base-200 w-full md:w-1/5"
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
@@ -196,6 +198,17 @@ useEffect(() => {
                 </option>
               ))}
             </select>
+
+            <button
+              disabled={!isFilterActive}
+              className={`btn btn-ghost outline-shadow bg-base-200 items-center border-gray-700 text-sm h-10 gap-1
+              ${!isFilterActive ? "opacity-80 cursor-not-allowed" : "hover:text-base-content"}`}
+              title="Reset filters"
+              onClick={() => window.dispatchEvent(new Event("refreshProblems"))}
+            >
+              Clear Filters
+              {/* <X className="w-4 h-4 " /> */}
+            </button>
           </div>
 
           <button
@@ -210,8 +223,7 @@ useEffect(() => {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl shadow-md"
-      >
+      <div className="overflow-x-auto rounded-xl shadow-md">
         <table className="table table-zebra table-lg bg-base-200 text-base-content">
           <thead className="bg-base-200">
             <tr>
@@ -223,12 +235,6 @@ useEffect(() => {
               <th>Company Tags</th>
               <th className="flex flex-row  align-middle justify-center items-center gap-4">
                 Actions
-                <RotateCcw
-                  className="w-4 h-6 cursor-pointer hover:text-white "
-                  onClick={() =>
-                    window.dispatchEvent(new Event("refreshProblems"))
-                  }
-                />
               </th>
             </tr>
           </thead>
@@ -236,7 +242,7 @@ useEffect(() => {
             {paginatedProblems.length > 0 ? (
               paginatedProblems.map((problem) => {
                 const isSolved = problem.solvedBy.some(
-                  (user) => user.userId === authUser?.id
+                  (user) => user.userId === authUser?.id,
                 );
 
                 return (
@@ -276,8 +282,8 @@ useEffect(() => {
                           problem.difficulty === "EASY"
                             ? "badge-success"
                             : problem.difficulty === "MEDIUM"
-                            ? "badge-warning"
-                            : "badge-error"
+                              ? "badge-warning"
+                              : "badge-error"
                         }`}
                       >
                         {problem.difficulty}
@@ -377,7 +383,6 @@ useEffect(() => {
         </table>
       </div>
 
-   
       <div className="flex justify-center mt-6 items-center  gap-2">
         <div className=" outline shadow-sm  btn-group rounded-sm">
           <button
@@ -399,7 +404,6 @@ useEffect(() => {
           </button>
         </div>
       </div>
-
 
       <CreatePlayListModel
         isOpen={isCreateModelOpen} //value of clicked button

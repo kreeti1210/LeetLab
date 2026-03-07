@@ -21,8 +21,8 @@ import {
   Home,
   Sun,
   Moon,
-X,
-Info
+  X,
+  Info,
 } from "lucide-react";
 
 import { useProblemStore } from "../store/useProblemStore";
@@ -38,7 +38,6 @@ import { useLocation } from "react-router-dom";
 
 import { useAuthStore } from "../store/useAuthStore";
 
-
 const ProblemPage = () => {
   const { id } = useParams();
   const { getProblemById, problem, isProblemLoading, addCompanyTag } =
@@ -50,18 +49,14 @@ const ProblemPage = () => {
     getSubmissionCount,
     submissionCount,
   } = useSubmissionStore();
-  const {authUser}=useAuthStore();
-const editorRef = useRef(null);
-
-
+  const { authUser } = useAuthStore();
+  const editorRef = useRef(null);
   const [code, setCode] = useState("");
-
   const [activeTab, setActiveTab] = useState("description");
   const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testCases, setTestCases] = useState([]);
   const [isShareModelOpen, setIsShareModelOpen] = useState(false);
-
   const {
     executeCode,
     submission,
@@ -71,7 +66,7 @@ const editorRef = useRef(null);
     detailedResults,
     resetExecutionResults,
   } = useExecutionStore();
-  const [darkMode, setDarkMode] = useState(true);
+
   useEffect(() => {
     getProblemById(id);
     getSubmissionCount(id);
@@ -101,7 +96,7 @@ const editorRef = useRef(null);
     "Oracle",
   ];
   const filteredCompanies = companies.filter((company) =>
-    company.toLowerCase().includes(searchCompany.toLowerCase())
+    company.toLowerCase().includes(searchCompany.toLowerCase()),
   );
 
   useEffect(() => {
@@ -112,7 +107,7 @@ const editorRef = useRef(null);
         problem.testcases?.map((tc) => ({
           input: tc.input,
           output: tc.output,
-        })) || []
+        })) || [],
       );
     }
   }, [problem, selectedLanguage]);
@@ -128,10 +123,10 @@ const editorRef = useRef(null);
   useEffect(() => {
     if (isDemo === true) {
       setCode(
-        "const fs = require('fs');\n\n// Reading input from stdin (using fs to read all input)\nconst input = fs.readFileSync(0, 'utf-8').trim();\nconst [a, b] = input.split(' ').map(Number);\n\nconsole.log(a + b);"
+        "const fs = require('fs');\n\n// Reading input from stdin (using fs to read all input)\nconst input = fs.readFileSync(0, 'utf-8').trim();\nconst [a, b] = input.split(' ').map(Number);\n\nconsole.log(a + b);",
       );
     }
-  }, [isDemo]); 
+  }, [isDemo]);
 
   const handleAddToCompany = (problemid, company) => {
     addCompanyTag([problemid], [company.toLowerCase().trim()]);
@@ -143,13 +138,22 @@ const editorRef = useRef(null);
     setCode(problem.codeSnippets?.[lang] || "");
   };
 
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme ? savedTheme === "dark" : true;
+  });
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.setAttribute(
-      "data-theme",
-      darkMode ? "light" : "dark"
-    );
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    const theme = newMode ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   };
 
   const renderTabContent = () => {
@@ -195,7 +199,7 @@ const editorRef = useRef(null);
                         </div>
                       )}
                     </div>
-                  )
+                  ),
                 )}
               </>
             )}
@@ -246,7 +250,7 @@ const editorRef = useRef(null);
     }
   };
 
-   const handleRunCode = (e) => {
+  const handleRunCode = (e) => {
     e.preventDefault();
     try {
       resetExecutionResults(); // Reset before execution
@@ -322,51 +326,52 @@ const editorRef = useRef(null);
           </div>
         </div>
         {authUser?.role === "ADMIN" && (
-        <div className="relative mr-2 flex flex-row items-center rounded border p-2">
-          <input
-            type="text"
-            placeholder="Add to company..."
-            className="w-full bg-transparent outline-none"
-            value={selectedCompany || searchCompany || ""}
-            onChange={(e) => setSearchCompany(e.target.value)}
-          />
+          <div className="relative mr-2 flex flex-row items-center rounded border p-2">
+            <input
+              type="text"
+              placeholder="Add to company..."
+              className="w-full bg-transparent outline-none"
+              value={selectedCompany || searchCompany || ""}
+              onChange={(e) => setSearchCompany(e.target.value)}
+            />
 
-          {searchCompany && (
-            <ul className="absolute left-0 top-full mt-1 z-10 bg-base-200 rounded shadow w-full">
-              {filteredCompanies.map((company) => (
-                <li
-                  key={company}
-                  className="p-2 bg-base-200 cursor-pointer"
-                  onClick={() => {
-                    setSelectedCompany(company);
-                    setSearchCompany("");
-                  }}
-                >
-                  {company}
-                </li>
-              ))}
-            </ul>
-          )}
-          <X
-            className="w-5 h-5 mr-2"
-            onClick={() => {
-              setSelectedCompany("");
-              setSearchCompany("");
-            }}
-          />
-          <Plus
-            className="w-5 h-5"
-            onClick={() => {
-              if (searchCompany === "" && selectedCompany === "")
-                toast.error("Please enter a company name");
-              if (selectedCompany === "" && searchCompany !== "")
-                setSelectedCompany(searchCompany);
-              if (selectedCompany !== "")
-                handleAddToCompany(problem?.id, selectedCompany);
-              // Hides dropdown
-            }}
-          />
-        </div>)}
+            {searchCompany && (
+              <ul className="absolute left-0 top-full mt-1 z-10 bg-base-200 rounded shadow w-full">
+                {filteredCompanies.map((company) => (
+                  <li
+                    key={company}
+                    className="p-2 bg-base-200 cursor-pointer"
+                    onClick={() => {
+                      setSelectedCompany(company);
+                      setSearchCompany("");
+                    }}
+                  >
+                    {company}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <X
+              className="w-5 h-5 mr-2"
+              onClick={() => {
+                setSelectedCompany("");
+                setSearchCompany("");
+              }}
+            />
+            <Plus
+              className="w-5 h-5"
+              onClick={() => {
+                if (searchCompany === "" && selectedCompany === "")
+                  toast.error("Please enter a company name");
+                if (selectedCompany === "" && searchCompany !== "")
+                  setSelectedCompany(searchCompany);
+                if (selectedCompany !== "")
+                  handleAddToCompany(problem?.id, selectedCompany);
+                // Hides dropdown
+              }}
+            />
+          </div>
+        )}
 
         <div className="flex-none gap-4">
           <button

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 const ProblemTable = lazy(() => import("../components/ProblemTable.jsx"));
 
-
 const HomePage = () => {
   const {
     getAllProblems,
@@ -45,27 +44,32 @@ const HomePage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-
   const handleRecommendedproblems = useCallback(
     (problemId) => navigate(`/problem/${problemId}`),
-    [navigate]
+    [navigate],
   );
 
-
-   
+  useEffect(() => {
+    const handleRefreshHome = () => {
+      setSelectedCompany("");
+    };
+    window.addEventListener("refreshProblems", handleRefreshHome);
+    return () =>
+      window.removeEventListener("refreshProblems", handleRefreshHome);
+  }, []);
 
   return (
     <div className="min-h-screen w-full flex flex-row gap-6 ">
       {/* Main Content Section */}
       <div className="flex flex-col items-center  w-full">
-        <section className="flex flex-col items-center justify-center w-full min-h-[60px] py-8 px-4 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+        <section className="flex flex-col items-center justify-center w-full min-h-[60px] py-8 px-4 bg-gradient-to-b from-base-200 via-base-300 to-base-200">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white mb-4">
+            <h1 className="text-4xl font-bold tracking-tight text-base-content mb-4">
               LeetLab welcomes{" "}
               <span className="text-indigo-400">{authUser?.name || "You"}</span>
               !
             </h1>
-            <p className="text-lg text-gray-400 max-w-xl mx-auto leading-relaxed">
+            <p className="text-lg text-base-content/70  max-w-xl mx-auto leading-relaxed">
               A beginner-friendly, LeetCode-inspired platform for sharpening
               your problem-solving skills and acing technical interviews.
             </p>
@@ -90,7 +94,10 @@ const HomePage = () => {
                     </>
                   }
                 >
-                  <ProblemTable problems={filteredProblems} />
+                  <ProblemTable
+                    problems={filteredProblems}
+                    sidebarCompany={selectedCompany}
+                  />
                 </Suspense>
               </div>
             ) : (

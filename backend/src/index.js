@@ -45,18 +45,17 @@ const keepAlive = () => {
     async () => {
       try {
         const res = await axios.get(
-          "${import.meta.env.VITE_BACKEND_URL}/api/v1/health-check",
-          {
-            timeout: 4000,
-          },
+          `${process.env.BACKEND_URL}/api/v1/health-check`,
+          { timeout: 4000 },
         );
+
         console.log("✅ Ping successful:", res.status);
       } catch (error) {
         console.warn("⚠️ Ping failed:", error.message);
       }
     },
     1000 * 60 * 10,
-  ); // every 10 minutes
+  );
 };
 
 keepAlive();

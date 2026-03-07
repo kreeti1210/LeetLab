@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { usePlayListStore } from "../store/usePlayListStore";
-import { useAuthStore } from "../store/useAuthStore"; 
-import { Link} from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import { Link } from "react-router-dom";
 import {
   BookOpen,
   ChevronDown,
@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import CreatePlayListModel from "../components/CreatePlayListModel";
 
-
 const PlaylistProfile = () => {
   const { authUser } = useAuthStore();
 
@@ -22,11 +21,9 @@ const PlaylistProfile = () => {
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
   const { createPlayList } = usePlayListStore();
 
-   
   useEffect(() => {
     getAllPlayLists();
-  }, [authUser,getAllPlayLists]);
-
+  }, [authUser, getAllPlayLists]);
 
   const togglePlayList = (id) => {
     if (expandedPlaylist === id) setExpendedPlaylist(null);
@@ -56,19 +53,16 @@ const PlaylistProfile = () => {
       day: "numeric",
     }).format(date);
   };
- 
+
   const handleCreatePlayList = async (data) => {
     await createPlayList(data);
-   
   };
- 
-
 
   return (
-    <div className="p-4 bg-base-200 min-h-screen">
+    <div className="p-4 bg-base-200  max-w-4xl mx-auto min-h-screen">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-primary">My Playlists</h2>
+          <h2 className="text-2xl font-bold text-primary/90">My Playlists</h2>
           <button
             className="btn btn-primary btn-sm mr-2"
             onClick={() => {
@@ -179,7 +173,7 @@ const PlaylistProfile = () => {
                                   </td>
                                   <td>
                                     {getDifficultyBadge(
-                                      item.problem.difficulty
+                                      item.problem.difficulty,
                                     )}
                                   </td>
                                   <td>
