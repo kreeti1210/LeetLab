@@ -10,7 +10,7 @@ import cors from "cors";
 import axios from "axios";
 import { connectRedis } from "./libs/redis.js";
 import healthcheckRoutes from "./routes/healthcheck.route.js";
-
+import dailyChallengeRoutes from "./routes/dailyChallenge.route.js";
 const app = express();
 
 app.use(express.json());
@@ -34,6 +34,7 @@ app.use("/api/v1/execute-code", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/health-check", healthcheckRoutes);
+app.use("/api/v1", dailyChallengeRoutes);
 app.listen(process.env.PORT, () =>
   console.log("server started at port for leetlab", process.env.PORT),
 );

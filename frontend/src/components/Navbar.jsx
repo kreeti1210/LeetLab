@@ -1,9 +1,10 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { User, Code, LogOut, Folder, Search, Sun, Moon,Trophy,Flame } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import { useProblemStore } from "../store/useProblemStore";
+import {axiosInstance} from "../lib/axios";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
@@ -11,28 +12,34 @@ const Navbar = () => {
   const [dailyChallenge, setDailyChallenge] = useState(null);
   const { problems, isProblemsLoading, getAllProblems } = useProblemStore();
 
+
+  useEffect(() => {
+    if (!authUser) return;
+
+    window.requestIdleCallback(() => {
+      getAllProblems();
+    });
+  }, [authUser, getAllProblems]);
 useEffect(() => {
   if (!authUser) return;
-  // Defer to idle time to avoid blocking render
-  window.requestIdleCallback(() => {
-    getAllProblems();
-  });
-}, [authUser, getAllProblems]);
 
+  const fetchDailyChallenge = async () => {
+    try {
+      const res = await axiosInstance.get("/daily-challenge");
 
-  const randomChallengeRef = useRef(null);
-  useEffect(() => {
-    if (authUser && problems.length > 0 && !randomChallengeRef.current) {
-      const random = problems[Math.floor(Math.random() * problems.length)];
-     
-      randomChallengeRef.current = {
-        title: random.title,
-        link: `/problem/${random.id}`,
-      };
-      setDailyChallenge(randomChallengeRef.current);
-      
+      const challenge = res.data;
+
+      setDailyChallenge({
+        title: challenge.title,
+        link: `/problem/${challenge.id}`,
+      });
+    } catch (error) {
+      console.error("Failed to fetch daily challenge:", error);
     }
-  }, [authUser, problems]);
+  };
+
+  fetchDailyChallenge();
+}, [authUser]);
   
 
   const toggleDarkMode = () => {
