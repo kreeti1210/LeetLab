@@ -37,6 +37,7 @@ import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 
 import { useAuthStore } from "../store/useAuthStore";
+import ChatWidget from "../components/ChatWidget";
 
 const ProblemPage = () => {
   const { id } = useParams();
@@ -489,7 +490,7 @@ const ProblemPage = () => {
                   onChange={(value) => setCode(value || "")}
                   options={{
                     minimap: { enabled: false },
-                    fontSize: 22,
+                    fontSize: 18,
                     lineNumbers: "on",
                     roundedSelection: false,
                     scrollBeyondLastLine: false,
@@ -588,6 +589,7 @@ const ProblemPage = () => {
           </div>
         </div>
       </div>
+      <ChatWidget/>
     </div>
   );
 };

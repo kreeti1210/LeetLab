@@ -1,4 +1,4 @@
-import React,{useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -14,27 +14,28 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import ChangePasswordPopup from "../components/ChangePasswordPopup";
 
- import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
+import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
 import EditProfile from "../components/EditProfile";
 import Footer from "../components/Footer";
 
 const Profile = () => {
-  const { authUser,forgotPassword,resetSuccessfully,changeRoleProfile } = useAuthStore();
-    const { submissions, getAllSubmissions } = useSubmissionStore();
-      useEffect(() => {
-        getAllSubmissions();
-      }, [getAllSubmissions]);
-     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
-     const [isHidden, setIsHidden] = useState(true);
+  const { authUser, forgotPassword, resetSuccessfully, changeRoleProfile } =
+    useAuthStore();
+  const { submissions, getAllSubmissions } = useSubmissionStore();
+  useEffect(() => {
+    getAllSubmissions();
+  }, [getAllSubmissions]);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
 
-     const[isEditProfileOpen, setIsEditProfileOpen] = useState(false);
-     const handleChangePassword = async (data) => {
-       await forgotPassword(data);
-     };
-     const handleEditProfile = async (data) => {
-     await  changeRoleProfile(data); 
-     }
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const handleChangePassword = async (data) => {
+    await forgotPassword(data);
+  };
+  const handleEditProfile = async (data) => {
+    await changeRoleProfile(data);
+  };
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center pt-10 px-4 md:px-8 w-full">
       {/* Header with back button */}
@@ -58,10 +59,7 @@ const Profile = () => {
                 <div className="bg-neutral text-neutral-content rounded-full w-24 h-24 ring ring-primary ring-offset-base-100 ring-offset-2">
                   {authUser.image ? (
                     <img
-                      src={
-                        authUser?.image ||
-                        "https://avatar.iran.liara.run/public/boy"
-                      }
+                      src={authUser?.image || "../../public/man.png"}
                       alt="avatar"
                       className="object-cover"
                     />

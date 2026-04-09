@@ -1,5 +1,15 @@
-import React, { useState, useEffect} from "react";
-import { User, Code, LogOut, Folder, Search, Sun, Moon,Trophy,Flame } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import {
+  User,
+  Code,
+  LogOut,
+  Folder,
+  Search,
+  Sun,
+  Moon,
+  Trophy,
+  Flame,
+} from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
@@ -99,11 +109,11 @@ const Navbar = () => {
         </div>
 
         {/* Actions & User Dropdown */}
-        <div className="flex-1 flex items-center justify-end gap-6">
+        <div className="flex-1 flex items-center justify-end gap-5">
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
-            className="btn btn-circle btn-ghost hover:bg-primary/20"
+            className="btn btn-circle btn-ghost p-1 bg-primary/10 hover:bg-primary/20"
           >
             {darkMode ? (
               <Sun className="w-5 h-5 border-white-400" />
@@ -113,17 +123,17 @@ const Navbar = () => {
           </button>
 
           {/* User Profile Dropdown */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
                 className="btn btn-ghost btn-circle avatar flex flex-row "
               >
-                <div className="w-10 h-10 rounded-full ">
+                <div className="w-10 h-10 p-0.5 bg-primary/10 rounded-full ">
                   <img
                     src={
-                      authUser?.image ||
-                      "https://avatar.iran.liara.run/public/boy"
+                      "../../public/man.png" ||
+                      (authUser?.name ? authUser?.name.charAt(0) : "U")
                     }
                     alt="User Avatar"
                     className="object-cover"

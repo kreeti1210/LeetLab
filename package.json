@@ -3,7 +3,10 @@
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "jsonwebtoken": "^9.0.2",
-    "redis": "^5.11.0"
+    "react-markdown": "^10.1.0",
+    "redis": "^5.11.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "daisyui": "^5.0.35"
