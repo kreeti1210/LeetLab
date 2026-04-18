@@ -129,7 +129,7 @@ const ChatWidget = () => {
                   <div className="w-7 h-7 min-w-[28px] rounded-full overflow-hidden border border-white/20">
                     <img
                       src={
-                        "../../public/man.png" ||
+                        "../../man.png" ||
                         "https://avatar.iran.liara.run/public/boy"
                       }
                       alt="user"

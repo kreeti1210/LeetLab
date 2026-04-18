@@ -132,7 +132,7 @@ const Navbar = () => {
                 <div className="w-10 h-10 p-0.5 bg-primary/10 rounded-full ">
                   <img
                     src={
-                      "../../public/man.png" ||
+                      "../../man.png" ||
                       (authUser?.name ? authUser?.name.charAt(0) : "U")
                     }
                     alt="User Avatar"

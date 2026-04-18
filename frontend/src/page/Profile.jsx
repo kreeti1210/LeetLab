@@ -59,7 +59,7 @@ const Profile = () => {
                 <div className="bg-neutral text-neutral-content rounded-full w-24 h-24 ring ring-primary ring-offset-base-100 ring-offset-2">
                   {authUser.image ? (
                     <img
-                      src={authUser?.image || "../../public/man.png"}
+                      src={authUser?.image || "../../man.png"}
                       alt="avatar"
                       className="object-cover"
                     />
