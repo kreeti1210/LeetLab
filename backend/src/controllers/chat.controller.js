@@ -42,9 +42,11 @@ export const chatWithAI = async (req, res) => {
     const isUnsafe = await checkInputGuardrail(message);
 
     if (isUnsafe) {
+       const replyByGuardRail = "I can’t provide full solutions, but I can guide you step-by-step. What part are you stuck on?";
+       addToHistory(userId, { role: "user", content: message });
+       addToHistory(userId, { role: "assistant", content: replyByGuardRail });
       return res.status(200).json({
-        reply:
-          "I can’t provide full solutions, but I can guide you step-by-step. What part are you stuck on?",
+        reply: replyByGuardRail,
       });
     }
 
